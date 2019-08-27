@@ -1,0 +1,5 @@
+<div class="mt-4 mb-5 message-list" #scrollMe>
+    <div *ngFor="let message of messages">
+      <app-message-card [message]="message"></app-message-card>
+  </div>
+</div>
