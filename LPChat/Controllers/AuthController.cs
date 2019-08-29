@@ -23,12 +23,9 @@ namespace LPChat.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLogin userForLogin)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(new OperationResult(false, "Bad credentials"));
-
             var result = await _authService.Login(userForLogin);
 
-            if (result.Success)
+            if (result.Succeeded)
             {
                 return Ok(result);
             }
@@ -39,12 +36,9 @@ namespace LPChat.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegister userForRegister)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(new OperationResult(false, "Bad credentials"));
-
             var result = await _authService.Register(userForRegister);
 
-            if (result.Success)
+            if (result.Succeeded)
             {
                 return Ok(result);
             }

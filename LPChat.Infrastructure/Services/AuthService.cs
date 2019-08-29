@@ -45,7 +45,7 @@ namespace LPChat.Infrastructure.Services
 
             await _personContext.Insert(person);
 
-            return new OperationResult(true, "Registration succesful", person.ID);
+            return new OperationResult(true, "Registration succesful", payload: person.ID);
         }
 
         public async Task<OperationResult> Login(UserForLogin userForLoginDto)
