@@ -13,17 +13,27 @@ export class MessageEditorComponent implements OnInit {
 
   message: Message = new Message();
 
+  messageText: string = '';
+
   ngOnInit() {
   }
 
   onSend() {
+
     this.messageService.sendMessage(this.message)
     .subscribe(() => {
-      console.log('good');
       this.message = new Message();
     }, error => {
-      console.error('ZHOPA');
+      console.error(error);
     })
+  }
+
+  getMessage(): Message {
+    const message = new Message();
+
+    message.text = this.messageText;
+
+    return message;
   }
 
 }

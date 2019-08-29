@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,9 +7,19 @@ namespace LPChat.Core.Entities
 {
     public class Person
     {
-        public int ID { get; set; }
+        [BsonId]
+        public Guid ID { get; set; }
+
+        [BsonRequired]
         public string Username { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+        [BsonRequired]
         public byte[] PasswordHash { get; set; }
+
+        [BsonRequired]
         public byte[] PasswordSalt { get; set; }
     }
 }
