@@ -130,6 +130,8 @@ namespace LPChat.Infrastructure.Services
             {
                     new Claim(ClaimTypes.NameIdentifier, person.ID.ToString()),
                     new Claim(ClaimTypes.Name, person.Username),
+                    new Claim(ClaimTypes.GivenName, person.FirstName),
+                    new Claim(ClaimTypes.Surname, person.LastName)
             };
 
             var claimsIdentity = new ClaimsIdentity(claims);
