@@ -115,7 +115,7 @@ namespace LPChat.Infrastructure.Services
 
         private async Task<bool> PersonExists(string username)
         {
-            var persons = await _personContext.GetAsync(u => u.Username == username);
+            var persons = await _personContext.GetAsync(u => u.Username.ToUpper() == username.ToUpper());
 
             if (persons.Count > 0)
                 return true;
