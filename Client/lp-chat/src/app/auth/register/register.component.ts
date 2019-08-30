@@ -50,14 +50,10 @@ export class RegisterComponent implements OnInit {
         if (result.succeeded){
           this.toastr.success(result.title)
         }
-      }, error => {
-        this.toastr.error(error.title);
+      }, (er) => {
+        this.toastr.error(er.error.title);
         this.regForm.enable();
       });
     }
-    console.log(user);
-
-    
   }
-
 }
