@@ -50,7 +50,7 @@ namespace LPChat.Infrastructure.Services
 
         public async Task<OperationResult> Login(UserForLogin userForLoginDto)
         {
-            var persons = await _personContext.GetAsync(u => u.Username == userForLoginDto.UserName);
+            var persons = await _personContext.GetAsync(u => u.Username.ToUpper() == userForLoginDto.UserName.ToUpper());
             var person = persons.FirstOrDefault();
 
             if (person == null)
@@ -130,8 +130,8 @@ namespace LPChat.Infrastructure.Services
             {
                     new Claim(ClaimTypes.NameIdentifier, person.ID.ToString()),
                     new Claim(ClaimTypes.Name, person.Username),
-                    new Claim(ClaimTypes.GivenName, person.FirstName),
-                    new Claim(ClaimTypes.Surname, person.LastName)
+                    new Claim(ClaimTypes.GivenName, person.FirstName ?? string.Empty),
+                    new Claim(ClaimTypes.Surname, person.LastName ?? string.Empty)
             };
 
             var claimsIdentity = new ClaimsIdentity(claims);
