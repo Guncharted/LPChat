@@ -23,7 +23,8 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.auth.login(this.loginForm.value).subscribe(
         next => this.toastr.success('Logged in'),
-        error => this.toastr.error('Login attempt failed')
+        error => this.toastr.error('Login attempt failed'),
+        () => console.log('redirect...')
       );
     }
   }
