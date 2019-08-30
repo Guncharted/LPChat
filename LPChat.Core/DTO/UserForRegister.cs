@@ -16,5 +16,8 @@ namespace LPChat.Core.DTO
 
         [Compare("Password", ErrorMessage = "Passwords do not match")]
         public string ConfirmPassword { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }
