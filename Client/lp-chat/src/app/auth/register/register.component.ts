@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { NgForm, AbstractControl, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { passwordMatch } from 'src/app/_directives/password-match.directive';
+import { UserForRegister } from 'src/app/_models/user-for-register';
+import { AuthService } from 'src/app/_services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -32,15 +35,29 @@ export class RegisterComponent implements OnInit {
 
   
 
-  constructor() { }
+  constructor(private auth: AuthService, private toastr: ToastrService) { }
 
   ngOnInit() {
-    // this.confirmPassword.validator.apply(() => this.password.value === this.confirmPassword.value);
   }
 
   onSubmit() {
-    console.log(this.regForm.value);
+    let user: UserForRegister;
 
+    if (this.regForm.valid) {
+      user = this.regForm.value;
+      this.regForm.disable();
+      this.auth.register(user).subscribe((result: any) => {
+        if (result.succeeded){
+          this.toastr.success(result.title)
+        }
+      }, error => {
+        this.toastr.error(error.title);
+        this.regForm.enable();
+      });
+    }
+    console.log(user);
+
+    
   }
 
 }
