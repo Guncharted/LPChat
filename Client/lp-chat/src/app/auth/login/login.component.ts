@@ -21,9 +21,15 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      let user = this.loginForm.value;
+      this.loginForm.disable();
+
       this.auth.login(this.loginForm.value).subscribe(
         next => this.toastr.success('Logged in'),
-        error => this.toastr.error('Login attempt failed'),
+        error => { 
+          this.toastr.error('Username or password do not match');
+          this.loginForm.enable();
+        },
         () => console.log('redirect...')
       );
     }
