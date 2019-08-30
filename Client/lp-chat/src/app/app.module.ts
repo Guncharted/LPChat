@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-
+import { JwtModule } from '@auth0/angular-jwt';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ChatComponent } from './chat/chat.component';
@@ -13,7 +13,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ToastrModule } from 'ngx-toastr';
-import { from } from 'rxjs';
+import { environment } from 'src/environments/environment';
+
+export function tokenGetter() {
+  return localStorage.getItem("access_token");
+}
 
 @NgModule({
   declarations: [
@@ -31,6 +35,13 @@ import { from } from 'rxjs';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        whitelistedDomains: ['http://localhost:5000'],
+        blacklistedRoutes: ['http://localhost:5000/api/register']
+      }
+    }),
     BrowserAnimationsModule,
     ToastrModule.forRoot()
   ],
