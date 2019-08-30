@@ -14,6 +14,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ToastrModule } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
+import { NavComponent } from './nav/nav.component';
 
 export function tokenGetter() {
   return localStorage.getItem("access_token");
@@ -27,7 +28,8 @@ export function tokenGetter() {
     MessageEditorComponent,
     MessageCardComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    NavComponent
   ],
   imports: [
     BrowserModule,

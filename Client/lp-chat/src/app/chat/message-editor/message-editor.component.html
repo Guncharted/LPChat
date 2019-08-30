@@ -1,9 +1,7 @@
-<div class="footer fixed-bottom" style="max-height: 20vh;">
-  <div class="container text-center">
-    <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Enter your name" [(ngModel)]="message.person">
-    </div>
-    <div class="input-group mb-3">
+<div class="">
+  <hr class="my-0">
+  <div class="text-center">
+    <div class="input-group">
       <input type="text" class="form-control" placeholder="Enter your message" (keydown.enter)="onSend()"
         [(ngModel)]="message.text">
       <div class="input-group-append">
