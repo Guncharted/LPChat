@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6">
+      <p class="display-2">
+        Sign Up
+      </p>
+      <form [formGroup]="regForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="username">*Username</label>
+          <input type="text" class="form-control" id="username" placeholder="Required - at least 5 symbols" formControlName="username">
+        </div>
+
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" class="form-control" id="firstName" placeholder="First Name (optional)" formControlName="firstName">
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" class="form-control" id="lastName" placeholder="Last Name (optional)" formControlName="lastName">
+        </div>
+
+        <div class="form-group">
+          <label for="password">*Password</label>
+          <input type="password" class="form-control" id="password" placeholder="8-18 chars, must contain numbers upper and lowercase letters" formControlName="password">
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">*Confirm Password</label>
+          <span class="text-danger" *ngIf="regForm.errors?.passwordMatchFail && (regForm.touched || regForm.dirty)"> -
+            passwords do not match!</span>
+          <input type="password" class="form-control" id="confirmPassword" placeholder="Password again"
+            formControlName="confirmPassword" [ngClass]="{'password-mismatch': regForm.errors?.passwordMatchFail }">
+        </div>
+
+        <button type="submit" class="btn btn-success" [disabled]="!regForm.valid">Sign Up</button>
+      </form>
+    </div>
+    <div class="col-lg-6">
+      <p class="lead">
+        (Useful information will be added here)
+      </p>
+    </div>
+  </div>
+</div>

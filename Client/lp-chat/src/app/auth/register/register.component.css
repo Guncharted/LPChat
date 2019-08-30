@@ -1,0 +1,11 @@
+.ng-touched.ng-invalid {
+    border-color: red;
+}
+
+.ng-dirty.ng-touched.ng-valid {
+    border-color: green;
+}
+
+#confirmPassword.password-mismatch {
+    border-color: red;
+}

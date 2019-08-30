@@ -31,6 +31,10 @@ export class MessageEditorComponent implements OnInit {
   getMessage(): Message {
     const message = new Message();
 
+    if (message.text === '') {
+      
+    }
+
     message.text = this.messageText;
 
     return message;

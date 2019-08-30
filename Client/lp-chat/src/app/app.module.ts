@@ -6,9 +6,11 @@ import { AppComponent } from './app.component';
 import { ChatComponent } from './chat/chat.component';
 import { MessageListComponent } from './chat/message-list/message-list.component';
 import { MessageEditorComponent } from './chat/message-editor/message-editor.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MessageCardComponent } from './chat/message-card/message-card.component';
 import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 @NgModule({
   declarations: [
@@ -16,12 +18,15 @@ import { HttpClientModule } from '@angular/common/http';
     ChatComponent,
     MessageListComponent,
     MessageEditorComponent,
-    MessageCardComponent
+    MessageCardComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule
   ],
   providers: [],
