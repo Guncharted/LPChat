@@ -21,8 +21,14 @@ namespace LPChat.Helpers
         {
             services.AddSingleton<IMessageService, MessageService>();
             services.AddScoped<IAuthService, AuthService>();
+
+            //DB collections
             services
                 .AddScoped(x => new MongoDbService<Person>("lpchat", "persons", configuration.GetConnectionString("MongoLocal")));
+            services
+                .AddScoped(x => new MongoDbService<Conversation>("lpchat", "conversations", configuration.GetConnectionString("MongoLocal")));
+            services
+                .AddScoped(x => new MongoDbService<Message>("lpchat", "messages", configuration.GetConnectionString("MongoLocal")));
 
             services.AddCors();
 
