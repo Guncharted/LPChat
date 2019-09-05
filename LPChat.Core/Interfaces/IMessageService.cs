@@ -1,6 +1,6 @@
-﻿using System;
+﻿using LPChat.Core.Entities;
+using System;
 using System.Collections.Generic;
-using LPChat.Core.Entities;
 
 namespace LPChat.Core.Interfaces
 {

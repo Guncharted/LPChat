@@ -1,21 +1,20 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace LPChat.Core.Entities
 {
-    public class Conversation
+    public class Chat
     {
         [BsonId]
         public Guid ID { get; set; }
         public string Name { get; set; }
-        public List<Guid> PersonIds { get; set; }
+        public IEnumerable<Guid> PersonIds { get; set; }
 
         [BsonRequired]
         public bool IsPublic { get; private set; }
 
-        public Conversation(bool isPublic)
+        public Chat(bool isPublic)
         {
             IsPublic = isPublic;
         }

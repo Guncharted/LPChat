@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using LPChat.Core.DTO;
+﻿using LPChat.Core.DTO;
 using LPChat.Core.Interfaces;
-using LPChat.Core.Results;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace LPChat.Controllers
 {

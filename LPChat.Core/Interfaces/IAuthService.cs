@@ -1,8 +1,5 @@
 ﻿using LPChat.Core.DTO;
 using LPChat.Core.Results;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LPChat.Core.Interfaces

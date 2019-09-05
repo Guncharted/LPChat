@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LPChat.Core.DTO
+﻿namespace LPChat.Core.DTO
 {
     public class UserForLogin
     {

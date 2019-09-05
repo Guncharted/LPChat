@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using LPChat.Core.Entities;
+﻿using LPChat.Core.Entities;
 using LPChat.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace LPChat.Controllers
 {
@@ -30,8 +27,20 @@ namespace LPChat.Controllers
         public IActionResult Poll(DateTime? since = null)
         {
             var result = _messageService.GetMessages(since);
-            
+
             return Ok(result);
+        }
+
+        [HttpPost("create")]
+        public IActionResult CreateNewChat()
+        {
+            return Ok();
+        }
+
+        [HttpPost("addusers")]
+        public IActionResult AddUsersToChat()
+        {
+            return Ok();
         }
     }
 }

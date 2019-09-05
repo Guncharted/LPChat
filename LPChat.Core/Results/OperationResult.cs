@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LPChat.Core.Results
+﻿namespace LPChat.Core.Results
 {
     public class OperationResult
     {
