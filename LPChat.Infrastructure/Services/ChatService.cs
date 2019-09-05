@@ -1,6 +1,8 @@
 ﻿using LPChat.Core.DTO;
 using LPChat.Core.Entities;
 using LPChat.Core.Enums;
+using LPChat.Core.Exceptions;
+using LPChat.Core.Interfaces;
 using LPChat.Core.Results;
 using LPChat.Infrastructure.Repositories;
 using MongoDB.Driver;
@@ -11,8 +13,8 @@ using System.Threading.Tasks;
 
 namespace LPChat.Infrastructure.Services
 {
-    public class ChatService
-    {
+    public class ChatService : IChatService
+	{
         private readonly MongoDbService<Chat> _chatContext;
         public ChatService(MongoDbService<Chat> chatContext)
         {
@@ -24,73 +26,78 @@ namespace LPChat.Infrastructure.Services
             var chat = new Chat(chatForCreate.IsPublic);
 
             //PRIVATE CHAT: positive case - number of persons is 2
-            if (!chat.IsPublic && chatForCreate.Persons.Count() == 2)
+            if (!chat.IsPublic && chatForCreate.PersonIds.Count() == 2)
             {
                 //check to avoid duplicate private chats
-                var exists = await PrivateChatExists(chatForCreate.Persons);
+                var exists = await PrivateChatExists(chatForCreate.PersonIds);
 
                 //if exists, then return creation error
                 //TODO. return success result instead
                 if (exists)
                 {
-                    return new OperationResult(false, "Chat already exists!");
+					throw new ChatAppException("Chat already exists.");
                 }
             }
             //PRIVATE CHAT: case of incorrect number of persons
-            else if (!chat.IsPublic && chatForCreate.Persons.Count() != 2)
+            else if (!chat.IsPublic && chatForCreate.PersonIds.Count() != 2)
             {
-                return new OperationResult(false, "Failed to create private chat - incorrect number of persons");
+				throw new ChatAppException("Failed to create private chat - incorrect number of persons");
             }
 
             chat.Name = chatForCreate.Name;
-            chat.PersonIds = chatForCreate.Persons;
+            chat.PersonIds = chatForCreate.PersonIds;
+			chat.LastUpdatedUtcDate = DateTime.UtcNow;
 
             await _chatContext.Insert(chat);
 
             return new OperationResult(true, "Chat has been created!");
         }
 
-        public async Task<OperationResult> UpdatePersonList(ChatUserChanges changes, DbAction actionType)
+        public async Task<OperationResult> UpdatePersonList(ChatState newChatState)
         {
-            var chat = (await _chatContext.GetAsync(c => c.ID == changes.ChatId))?.FirstOrDefault();
+            var chat = (await _chatContext.GetAsync(c => c.ID == newChatState.ID))?.FirstOrDefault();
 
-            if (chat == null || chat.ID != changes.ChatId || !chat.IsPublic)
+            if (chat == null || chat.ID != newChatState.ID || !chat.IsPublic)
             {
-                return new OperationResult(false, "Unable to update user list");
+				throw new ChatAppException("Unable to update user list");
             }
 
             //creating new list of persons to rewrite based on specified action
-            IEnumerable<Guid> newPersonIdsList = GenerateNewPersonList(chat.PersonIds, changes.PersonIds, actionType);
+			//TODO.add check for existing users
+            var newPersonIdsList = newChatState.PersonIds.Distinct();
 
-            //creating definitions
-            var updateDef = Builders<Chat>.Update.Set(c => c.PersonIds, newPersonIdsList);
-            var filterDef = Builders<Chat>.Filter.Eq(c => c.ID, chat.ID);
+			//creating definition
+			var updateDef = Builders<Chat>.Update
+				.Set(c => c.PersonIds, newPersonIdsList)
+				.Set(c => c.LastUpdatedUtcDate, DateTime.UtcNow);
 
             //try update
-            var result = await _chatContext.UpdateOne(filterDef, updateDef);
+            var result = await _chatContext
+				.UpdateOneAsync(c => c.ID == newChatState.ID && c.LastUpdatedUtcDate == chat.LastUpdatedUtcDate, updateDef);
 
-            if (result.IsAcknowledged)
+            if (result.ModifiedCount > 0)
             {
                 return new OperationResult(true, "Users list has been updated");
             }
 
-            return new OperationResult(false, "Failed to update user list");
+			throw new ChatAppException("Failed to update user list");
         }
 
         public void GetChatInfo(Guid chatId)
         {
-
+			//determine use cases first
         }
 
-        public void GetUserChats(Guid personId)
+        private async Task<IEnumerable<Chat>> GetAllChatsOfUser(Guid personId)
         {
-
+			var chats = await _chatContext.GetAsync(c => c.PersonIds.Contains(personId));
+			return chats ?? new List<Chat>();
         }
 
         private async Task<bool> PrivateChatExists(IEnumerable<Guid> userIds)
         {
             var result = await _chatContext
-                .GetAsync(c => !c.IsPublic && c.PersonIds.Intersect(userIds).Count() == 2);
+                .GetAsync(c => !c.IsPublic && userIds.All(uid => c.PersonIds.Contains(uid)));
 
             return result.Count > 0 ? true : false;
         }

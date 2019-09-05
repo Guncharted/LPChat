@@ -7,7 +7,7 @@ namespace LPChat.Core.DTO
     public class ChatForCreate
     {
         [Required]
-        public IEnumerable<Guid> Persons { get; set; }
+        public IEnumerable<Guid> PersonIds { get; set; }
 
         [Required]
         public bool IsPublic { get; set; }

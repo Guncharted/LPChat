@@ -14,7 +14,9 @@ namespace LPChat.Core.Entities
         [BsonRequired]
         public bool IsPublic { get; private set; }
 
-        public Chat(bool isPublic)
+		public DateTime LastUpdatedUtcDate { get; set; }
+
+		public Chat(bool isPublic)
         {
             IsPublic = isPublic;
         }

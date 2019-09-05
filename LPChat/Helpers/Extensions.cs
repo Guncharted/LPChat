@@ -17,6 +17,7 @@ namespace LPChat.Helpers
         {
             services.AddSingleton<IMessageService, MessageService>();
             services.AddScoped<IAuthService, AuthService>();
+			services.AddScoped<IChatService, ChatService>();
 
             //DB collections
             services
