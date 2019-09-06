@@ -43,10 +43,12 @@ namespace LPChat.Controllers
 			return Ok(result);
 		}
 
-        [HttpPost("addusers")]
-        public IActionResult AddUsersToChat()
+        [HttpPost("updatePersons")]
+        public async Task<IActionResult> UpdatePersons(ChatState chatState)
         {
-            return Ok();
+            var result = await _chatservice.UpdatePersonList(chatState);
+
+            return Ok(result);
         }
     }
 }

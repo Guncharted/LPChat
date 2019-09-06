@@ -50,7 +50,7 @@ namespace LPChat.Infrastructure.Services
 
             await _chatContext.Insert(chat);
 
-            return new OperationResult(true, "Chat has been created!");
+            return new OperationResult(true, "Chat has been created!", chat);
         }
 
         public async Task<OperationResult> UpdatePersonList(ChatState newChatState)

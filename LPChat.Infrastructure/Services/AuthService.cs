@@ -34,7 +34,9 @@ namespace LPChat.Infrastructure.Services
 
             var person = new Person
             {
-                Username = userForRegister.Username
+                Username = userForRegister.Username,
+                FirstName = userForRegister.FirstName,
+                LastName = userForRegister.LastName
             };
 
             CreatePasswordHash(userForRegister.Password, out byte[] passwordHash, out byte[] passwordSalt);
