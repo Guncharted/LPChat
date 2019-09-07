@@ -32,7 +32,6 @@ namespace LPChat.Infrastructure.Services
                 var exists = await PrivateChatExists(chatForCreate.PersonIds);
 
                 //if exists, then return creation error
-                //TODO. return success result instead
                 if (exists)
                 {
 					throw new ChatAppException("Chat already exists.");
@@ -100,19 +99,6 @@ namespace LPChat.Infrastructure.Services
                 .GetAsync(c => !c.IsPublic && userIds.All(uid => c.PersonIds.Contains(uid)));
 
             return result.Count > 0 ? true : false;
-        }
-
-        private IEnumerable<Guid> GenerateNewPersonList(IEnumerable<Guid> current, IEnumerable<Guid> changes, DbAction action)
-        {
-            switch (action)
-            {
-                case DbAction.Update:
-                    return current.Union(changes).Distinct();
-                case DbAction.Delete:
-                    return current.Where(id => changes.Any(p => p != id));
-                default:
-                    return current;
-            }
         }
     }
 }
