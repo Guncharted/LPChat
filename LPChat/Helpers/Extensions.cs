@@ -11,7 +11,7 @@ using System.Text;
 
 namespace LPChat.Helpers
 {
-    public static class Extensions
+	public static class Extensions
     {
         public static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
