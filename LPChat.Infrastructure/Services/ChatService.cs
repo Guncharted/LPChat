@@ -16,9 +16,11 @@ namespace LPChat.Infrastructure.Services
     public class ChatService : IChatService
 	{
         private readonly MongoDbService<Chat> _chatContext;
-        public ChatService(MongoDbService<Chat> chatContext)
+		private readonly PersonInfoService _personInfoService;
+        public ChatService(MongoDbService<Chat> chatContext, PersonInfoService personInfoService)
         {
             _chatContext = chatContext;
+			_personInfoService = personInfoService;
         }
 
         public async Task<OperationResult> Create(ChatForCreate chatForCreate)
@@ -82,16 +84,53 @@ namespace LPChat.Infrastructure.Services
 			throw new ChatAppException("Failed to update user list");
         }
 
+		//for current chat
         public void GetChatInfo(Guid chatId)
         {
 			//determine use cases first
         }
 
-        private async Task<IEnumerable<Chat>> GetAllChatsOfUser(Guid personId)
-        {
+		//for sidebar
+		public async Task<IEnumerable<ChatInfo>> GetPersonChatList(Guid personId)
+		{
 			var chats = await _chatContext.GetAsync(c => c.PersonIds.Contains(personId));
-			return chats ?? new List<Chat>();
-        }
+
+			if (chats.Count == 0)
+			{
+				return new List<ChatInfo>();
+			}
+
+			if (chats.Any(c => !c.IsPublic))
+			{
+				//getting ids of companions
+				var companionIds = chats
+					.Where(c => !c.IsPublic)
+					.Select(p => p.PersonIds.First(id => id != personId));
+
+				//retrieving companions profiles
+				var companionsInfo = await _personInfoService.GetManyAsync(companionIds);
+
+				//setting names of private chats equal to companion's name
+				chats.ForEach(c =>
+				{
+					if (!c.IsPublic)
+					{
+						var compId = c.PersonIds.First(i => i != personId);
+						var comp = companionsInfo.First(p => p.ID == compId);
+						c.Name = _personInfoService.GetPersonDisplayName(comp);
+					}
+				});
+			}
+
+			var chatList = chats.Select(c => new ChatInfo
+			{
+				ID = c.ID,
+				Name = c.Name,
+				IsPublic = c.IsPublic
+			});
+
+			return chatList;
+		}
 
         private async Task<bool> PrivateChatExists(IEnumerable<Guid> userIds)
         {
@@ -100,5 +139,7 @@ namespace LPChat.Infrastructure.Services
 
             return result.Count > 0 ? true : false;
         }
+
+
     }
 }
