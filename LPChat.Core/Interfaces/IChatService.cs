@@ -5,10 +5,7 @@ using LPChat.Core.Results;
 
 namespace LPChat.Core.Interfaces
 {
-	public interface IChatService
+	public interface IChatService : IMessageService, IChatManagerService
 	{
-		Task<OperationResult> Create(ChatForCreate chatForCreate);
-		void GetChatInfo(Guid chatId);
-		Task<OperationResult> UpdatePersonList(ChatState newChatState);
 	}
 }

@@ -9,6 +9,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LPChat.Infrastructure.Services
@@ -16,13 +17,21 @@ namespace LPChat.Infrastructure.Services
     public class ChatService : IChatService
 	{
         private readonly MongoDbService<Chat> _chatContext;
-		private readonly PersonInfoService _personInfoService;
+        private readonly PersonInfoService _personInfoService;
+
+        //Messaging fields
+        //private readonly MongoDbService<Message> _messageContext;
+        private List<Message> _messages;
+        private readonly object threadLock = new object();
+        public List<Message> Messages => _messages = _messages ?? new List<Message>();
+
         public ChatService(MongoDbService<Chat> chatContext, PersonInfoService personInfoService)
         {
             _chatContext = chatContext;
 			_personInfoService = personInfoService;
         }
 
+        #region Chat Manager
         public async Task<OperationResult> Create(ChatForCreate chatForCreate)
         {
             var chat = new Chat(chatForCreate.IsPublic);
@@ -91,13 +100,13 @@ namespace LPChat.Infrastructure.Services
         }
 
 		//for sidebar
-		public async Task<IEnumerable<ChatInfo>> GetPersonChatList(Guid personId)
+		public async Task<OperationResult> GetChatList(Guid personId)
 		{
 			var chats = await _chatContext.GetAsync(c => c.PersonIds.Contains(personId));
 
 			if (chats.Count == 0)
 			{
-				return new List<ChatInfo>();
+                throw new ChatAppException("User is not added to chats.");
 			}
 
 			if (chats.Any(c => !c.IsPublic))
@@ -129,9 +138,55 @@ namespace LPChat.Infrastructure.Services
 				IsPublic = c.IsPublic
 			});
 
-			return chatList;
-		}
+            var result = new OperationResult(true, "Chat list retrieved", chatList);
 
+			return result;
+		}
+        #endregion
+
+        #region Messaging
+        public void AddMessage(Message message)
+        {
+            if (message == null)
+            {
+                throw new ArgumentNullException();
+            }
+            message.CreatedUtcDate = DateTime.UtcNow;
+
+            lock (threadLock)
+            {
+                Messages.Add(message);
+            }
+        }
+
+        public List<Message> GetMessages(DateTime? since)
+        {
+            if (since == null)
+            {
+                return Messages;
+            }
+
+            since = since.Value.ToUniversalTime();
+
+            var startDate = DateTime.UtcNow;
+
+            while (true)
+            {
+                var messagesForReturn = Messages.Where(m => m.CreatedUtcDate >= since).ToList();
+
+                if (messagesForReturn.Count > 0 || DateTime.UtcNow >= startDate + TimeSpan.FromMinutes(5))
+                {
+                    return messagesForReturn;
+                }
+
+                Thread.Sleep(1000);
+            }
+
+        }
+
+        #endregion
+
+        #region PRIVATE METHODS
         private async Task<bool> PrivateChatExists(IEnumerable<Guid> userIds)
         {
             var result = await _chatContext
@@ -139,7 +194,7 @@ namespace LPChat.Infrastructure.Services
 
             return result.Count > 0 ? true : false;
         }
-
+        #endregion
 
     }
 }
