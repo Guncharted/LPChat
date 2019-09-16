@@ -1,9 +1,10 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using LPChat.Domain.Interfaces;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 
 namespace LPChat.Domain.Entities
 {
-    public class Person
+    public class Person : IEntity
     {
         [BsonId]
         public Guid ID { get; set; }
@@ -19,5 +20,7 @@ namespace LPChat.Domain.Entities
 
         [BsonRequired]
         public byte[] PasswordSalt { get; set; }
+
+        public DateTime LastUpdatedUtcDate { get; set; }
     }
 }

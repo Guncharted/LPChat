@@ -12,9 +12,8 @@ namespace LPChat.Domain.Interfaces
         Task CreateAsync(T item);
         Task<T> FindById(Guid id);
         Task<IEnumerable<T>> GetAsync();
-        Task<IEnumerable<T>> GetAsync(Func<T, bool> predicate);
+        Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate);
         Task RemoveAsync(T item);
         Task UpdateAsync(T item);
-        Task UpdateRangeAsync(IEnumerable<T> items);
     }
 }

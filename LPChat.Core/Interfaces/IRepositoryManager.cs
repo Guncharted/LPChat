@@ -6,6 +6,6 @@ namespace LPChat.Domain.Interfaces
 {
     public interface IRepositoryManager
     {
-        IRepository<T> GetRepository<T>() where T : class;
+        IRepository<T> GetRepository<T>() where T : class, IEntity;
     }
 }
