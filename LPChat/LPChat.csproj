@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LPChat.Infrastructure\LPChat.Infrastructure.csproj" />
+    <ProjectReference Include="..\LPChat.MongoDb\LPChat.MongoDb.csproj" />
   </ItemGroup>
 
 </Project>

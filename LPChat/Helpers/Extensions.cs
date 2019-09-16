@@ -2,6 +2,7 @@
 using LPChat.Domain.Interfaces;
 using LPChat.Infrastructure.Repositories;
 using LPChat.Infrastructure.Services;
+using LPChat.MongoDb;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,8 @@ namespace LPChat.Helpers
                 .AddScoped(x => new MongoDbService<Chat>("lpchat", "chats", configuration.GetConnectionString("MongoLocal")));
             services
                 .AddScoped(x => new MongoDbService<Message>("lpchat", "messages", configuration.GetConnectionString("MongoLocal")));
+            services
+                .AddSingleton<IRepositoryManager, ReposiotoryManager>(x => new ReposiotoryManager("cchat", configuration.GetConnectionString("MongoLocal")));
 
             services.AddCors();
 
