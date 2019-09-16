@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace LPChat.Core.DTO
+namespace LPChat.Domain.DTO
 {
     public class ChatForCreate
     {

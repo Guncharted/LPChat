@@ -1,5 +1,5 @@
-﻿using LPChat.Core.Entities;
-using LPChat.Core.Interfaces;
+﻿using LPChat.Domain.Entities;
+using LPChat.Domain.Interfaces;
 using LPChat.Infrastructure.Repositories;
 using LPChat.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

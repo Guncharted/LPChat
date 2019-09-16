@@ -1,8 +1,8 @@
-﻿using LPChat.Core.Entities;
+﻿using LPChat.Domain.Entities;
 using System;
 using System.Collections.Generic;
 
-namespace LPChat.Core.Interfaces
+namespace LPChat.Domain.Interfaces
 {
     public interface IMessageService
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LPChat.Core.Exceptions
+namespace LPChat.Domain.Exceptions
 {
 	public class ChatAppException : Exception
 	{

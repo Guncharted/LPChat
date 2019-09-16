@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace LPChat.Core.Entities
+namespace LPChat.Domain.Entities
 {
     public class Chat
     {

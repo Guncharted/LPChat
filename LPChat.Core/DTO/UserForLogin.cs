@@ -1,4 +1,4 @@
-﻿namespace LPChat.Core.DTO
+﻿namespace LPChat.Domain.DTO
 {
     public class UserForLogin
     {

@@ -1,7 +1,7 @@
-﻿using LPChat.Core.DTO;
-using LPChat.Core.Entities;
-using LPChat.Core.Interfaces;
-using LPChat.Core.Results;
+﻿using LPChat.Domain.DTO;
+using LPChat.Domain.Entities;
+using LPChat.Domain.Interfaces;
+using LPChat.Domain.Results;
 using LPChat.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

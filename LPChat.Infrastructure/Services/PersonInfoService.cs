@@ -1,6 +1,6 @@
-﻿using LPChat.Core.DTO;
-using LPChat.Core.Entities;
-using LPChat.Core.Exceptions;
+﻿using LPChat.Domain.DTO;
+using LPChat.Domain.Entities;
+using LPChat.Domain.Exceptions;
 using LPChat.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;

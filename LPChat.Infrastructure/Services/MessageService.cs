@@ -1,5 +1,5 @@
-﻿using LPChat.Core.Entities;
-using LPChat.Core.Interfaces;
+﻿using LPChat.Domain.Entities;
+using LPChat.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

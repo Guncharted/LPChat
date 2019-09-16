@@ -1,5 +1,5 @@
-﻿using LPChat.Core.DTO;
-using LPChat.Core.Interfaces;
+﻿using LPChat.Domain.DTO;
+using LPChat.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

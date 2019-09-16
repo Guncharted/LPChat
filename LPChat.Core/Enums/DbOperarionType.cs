@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LPChat.Core.Enums
+namespace LPChat.Domain.Enums
 {
     public enum DbAction
     {

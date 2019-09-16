@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using LPChat.Core.DTO;
-using LPChat.Core.Results;
+using LPChat.Domain.DTO;
+using LPChat.Domain.Results;
 
-namespace LPChat.Core.Interfaces
+namespace LPChat.Domain.Interfaces
 {
 	public interface IChatService
 	{

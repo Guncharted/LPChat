@@ -1,4 +1,4 @@
-﻿namespace LPChat.Core.Results
+﻿namespace LPChat.Domain.Results
 {
     public class OperationResult
     {

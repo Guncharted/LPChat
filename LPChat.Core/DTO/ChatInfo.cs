@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LPChat.Core.DTO
+namespace LPChat.Domain.DTO
 {
 	public class ChatInfo
 	{
