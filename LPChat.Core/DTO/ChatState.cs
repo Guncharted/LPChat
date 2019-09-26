@@ -13,7 +13,5 @@ namespace LPChat.Domain.DTO
 
 		[Required]
 		public bool IsPublic { get; }
-
-
 	}
 }

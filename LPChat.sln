@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29201.188
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat", "LPChat\LPChat.csproj", "{970C0B1B-2373-43E6-9E60-176510D765C4}"
 EndProject
@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat.Core", "LPChat.Core\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat.Infrastructure", "LPChat.Infrastructure\LPChat.Infrastructure.csproj", "{339C2C69-2499-4299-A582-7EAA853FB9CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LPChat.MongoDb", "LPChat.MongoDb\LPChat.MongoDb.csproj", "{60337936-2C60-4C5C-9FD4-EB987A723B89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat.MongoDb", "LPChat.MongoDb\LPChat.MongoDb.csproj", "{60337936-2C60-4C5C-9FD4-EB987A723B89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LPChat.Tests", "LPChat.Tests\LPChat.Tests.csproj", "{B944E87A-76E6-4171-87D3-EE2208F07CCF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{60337936-2C60-4C5C-9FD4-EB987A723B89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60337936-2C60-4C5C-9FD4-EB987A723B89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60337936-2C60-4C5C-9FD4-EB987A723B89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B944E87A-76E6-4171-87D3-EE2208F07CCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B944E87A-76E6-4171-87D3-EE2208F07CCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B944E87A-76E6-4171-87D3-EE2208F07CCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B944E87A-76E6-4171-87D3-EE2208F07CCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

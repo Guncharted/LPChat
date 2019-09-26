@@ -1,5 +1,6 @@
 ﻿using LPChat.Domain.DTO;
 using LPChat.Domain.Entities;
+using LPChat.Domain.Exceptions;
 using LPChat.Domain.Interfaces;
 using LPChat.Domain.Results;
 using LPChat.Infrastructure.Repositories;
@@ -16,20 +17,20 @@ namespace LPChat.Infrastructure.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly MongoDbService<Person> _personContext;
         private readonly IConfiguration _config;
+		private readonly IRepositoryManager _repoManager;
 
-        public AuthService(MongoDbService<Person> context, IConfiguration configuration)
+        public AuthService(IRepositoryManager repoManager, IConfiguration configuration)
         {
-            _personContext = context;
             _config = configuration;
+			_repoManager = repoManager;
         }
 
         public async Task<OperationResult> Register(UserForRegister userForRegister)
         {
             if (await PersonExists(userForRegister.Username.ToLower()))
             {
-                return new OperationResult(false, "User already exists");
+				throw new DuplicateException("User already exists!");
             }
 
             var person = new Person
@@ -43,22 +44,24 @@ namespace LPChat.Infrastructure.Services
 
             person.PasswordHash = passwordHash;
             person.PasswordSalt = passwordSalt;
-
-            await _personContext.Insert(person);
+ 
+			var repository = _repoManager.GetRepository<Person>();
+			await repository.CreateAsync(person);
 
             return new OperationResult(true, "Registration succesful", payload: person.ID);
         }
 
         public async Task<OperationResult> Login(UserForLogin userForLoginDto)
         {
-            var persons = await _personContext.GetAsync(u => u.Username.ToUpper() == userForLoginDto.UserName.ToUpper());
+			var repository = _repoManager.GetRepository<Person>();
+            var persons = await repository.GetAsync(u => u.Username.ToUpper() == userForLoginDto.UserName.ToUpper());
             var person = persons.FirstOrDefault();
 
-            if (person == null)
-                return new OperationResult(false, "Wrong user");
+			if (person == null)
+				throw new UserNotFoundException("User not found.");
 
-            if (!VerifyPasswordHash(userForLoginDto.Password, person.PasswordHash, person.PasswordSalt))
-                return new OperationResult(false, "Wrong password");
+			if (!VerifyPasswordHash(userForLoginDto.Password, person.PasswordHash, person.PasswordSalt))
+				throw new PasswordMismatchException("Wrong password!");
 
             var token = GenerateToken(person);
             var result = new OperationResult(true, "Logged in", token);
@@ -116,7 +119,8 @@ namespace LPChat.Infrastructure.Services
 
         private async Task<bool> PersonExists(string username)
         {
-            var persons = await _personContext.GetAsync(u => u.Username.ToUpper() == username.ToUpper());
+			var repository = _repoManager.GetRepository<Person>();
+			var persons = (await repository.GetAsync(u => u.Username.ToUpper() == username.ToUpper())).ToList();
 
             if (persons.Count > 0)
                 return true;
