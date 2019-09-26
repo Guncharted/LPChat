@@ -15,12 +15,13 @@ namespace LPChat.Infrastructure.Services
 {
     public class ChatService : IChatService
 	{
-        private readonly MongoDbService<Chat> _chatContext;
 		private readonly PersonInfoService _personInfoService;
-        public ChatService(MongoDbService<Chat> chatContext, PersonInfoService personInfoService)
+		private readonly IRepositoryManager _repoManager;
+
+        public ChatService(IRepositoryManager repoManager, PersonInfoService personInfoService)
         {
-            _chatContext = chatContext;
 			_personInfoService = personInfoService;
+			_repoManager = repoManager;
         }
 
         public async Task<OperationResult> Create(ChatForCreate chatForCreate)
@@ -31,10 +32,10 @@ namespace LPChat.Infrastructure.Services
             if (!chat.IsPublic && chatForCreate.PersonIds.Count() == 2)
             {
                 //check to avoid duplicate private chats
-                var exists = await PrivateChatExists(chatForCreate.PersonIds);
+                var chatExists = await PrivateChatExists(chatForCreate.PersonIds);
 
                 //if exists, then return creation error
-                if (exists)
+                if (chatExists)
                 {
 					throw new ChatAppException("Chat already exists.");
                 }
@@ -49,14 +50,18 @@ namespace LPChat.Infrastructure.Services
             chat.PersonIds = chatForCreate.PersonIds;
 			chat.LastUpdatedUtcDate = DateTime.UtcNow;
 
-            await _chatContext.Insert(chat);
+            //await _chatContext.Insert(chat);
+
+			var repository = _repoManager.GetRepository<Chat>();
+			await repository.CreateAsync(chat);
 
             return new OperationResult(true, "Chat has been created!", chat);
         }
 
         public async Task<OperationResult> UpdatePersonList(ChatState newChatState)
         {
-            var chat = (await _chatContext.GetAsync(c => c.ID == newChatState.ID))?.FirstOrDefault();
+			var repository = _repoManager.GetRepository<Chat>();
+            var chat = (await repository.GetAsync(c => c.ID == newChatState.ID))?.FirstOrDefault();
 
             if (chat == null || chat.ID != newChatState.ID || !chat.IsPublic)
             {
@@ -67,14 +72,17 @@ namespace LPChat.Infrastructure.Services
 			//TODO.add check for existing users
             var newPersonIdsList = newChatState.PersonIds.Distinct();
 
-			//creating definition
-			var updateDef = Builders<Chat>.Update
-				.Set(c => c.PersonIds, newPersonIdsList)
-				.Set(c => c.LastUpdatedUtcDate, DateTime.UtcNow);
+			////creating definition
+			//var updateDef = Builders<Chat>.Update
+			//	.Set(c => c.PersonIds, newPersonIdsList)
+			//	.Set(c => c.LastUpdatedUtcDate, DateTime.UtcNow);
 
             //try update
-            var result = await _chatContext
-				.UpdateOneAsync(c => c.ID == newChatState.ID && c.LastUpdatedUtcDate == chat.LastUpdatedUtcDate, updateDef);
+            //var result = await _chatContext
+			//	.UpdateOneAsync(c => c.ID == newChatState.ID && c.LastUpdatedUtcDate == chat.LastUpdatedUtcDate, updateDef);
+
+			chat.PersonIds = newPersonIdsList;
+			await repository.UpdateAsync(chat);
 
             if (result.ModifiedCount > 0)
             {
@@ -134,10 +142,11 @@ namespace LPChat.Infrastructure.Services
 
         private async Task<bool> PrivateChatExists(IEnumerable<Guid> userIds)
         {
-            var result = await _chatContext
-                .GetAsync(c => !c.IsPublic && userIds.All(uid => c.PersonIds.Contains(uid)));
+			var repository = _repoManager.GetRepository<Chat>();
+            var result = await repository
+				.GetAsync(c => !c.IsPublic && userIds.All(uid => c.PersonIds.Contains(uid)));
 
-            return result.Count > 0 ? true : false;
+            return result.Count() > 0 ? true : false;
         }
 
 
