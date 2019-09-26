@@ -13,12 +13,10 @@ namespace LPChat.Infrastructure.Services
 {
 	public class PersonInfoService
 	{
-		private readonly MongoDbService<Person> _personContext;
 		private readonly IRepositoryManager _repoManager;
 
-		public PersonInfoService(MongoDbService<Person> personContext, IRepositoryManager repoManager)
+		public PersonInfoService(IRepositoryManager repoManager)
 		{
-			_personContext = personContext;
 			_repoManager = repoManager;
 		}
 
