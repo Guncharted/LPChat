@@ -1,6 +1,7 @@
 ﻿using LPChat.Domain.DTO;
 using LPChat.Domain.Entities;
 using LPChat.Domain.Exceptions;
+using LPChat.Domain.Interfaces;
 using LPChat.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
@@ -13,19 +14,22 @@ namespace LPChat.Infrastructure.Services
 	public class PersonInfoService
 	{
 		private readonly MongoDbService<Person> _personContext;
+		private readonly IRepositoryManager _repoManager;
 
-		public PersonInfoService(MongoDbService<Person> personContext)
+		public PersonInfoService(MongoDbService<Person> personContext, IRepositoryManager repoManager)
 		{
 			_personContext = personContext;
+			_repoManager = repoManager;
 		}
 
 		public async Task<PersonInfo> GetOneAsync(Guid personId)
 		{
-			var person = (await _personContext.GetAsync(p => p.ID == personId)).FirstOrDefault();
+			var repository = _repoManager.GetRepository<Person>();
+			var person = (await repository.GetAsync(p => p.ID == personId)).FirstOrDefault();
 			
 			if (person == null)
 			{
-				throw new ChatAppException($"Person with id {personId} does not exist!");
+				throw new PersonNotFoundException($"Person with id {personId} does not exist!");
 			}
 
 			var personInfo = MapToPersonInfo(person);
@@ -35,7 +39,8 @@ namespace LPChat.Infrastructure.Services
 
 		public async Task<IEnumerable<PersonInfo>> GetManyAsync(IEnumerable<Guid> IDs)
 		{
-			var persons = await _personContext.GetAsync(p => IDs.Contains(p.ID));
+			var repository = _repoManager.GetRepository<Person>();
+			var persons = await repository.GetAsync(p => IDs.Contains(p.ID));
 			var personsInfo = persons.Select(p => MapToPersonInfo(p));
 
 			return personsInfo;

@@ -58,7 +58,7 @@ namespace LPChat.Infrastructure.Services
             var person = persons.FirstOrDefault();
 
 			if (person == null)
-				throw new UserNotFoundException("User not found.");
+				throw new PersonNotFoundException("User not found.");
 
 			if (!VerifyPasswordHash(userForLoginDto.Password, person.PasswordHash, person.PasswordSalt))
 				throw new PasswordMismatchException("Wrong password!");
