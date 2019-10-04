@@ -1,10 +1,8 @@
 ﻿using LPChat.Domain.DTO;
 using LPChat.Domain.Entities;
-using LPChat.Domain.Enums;
 using LPChat.Domain.Exceptions;
 using LPChat.Domain.Interfaces;
 using LPChat.Domain.Results;
-using LPChat.Infrastructure.Repositories;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;

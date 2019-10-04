@@ -2,11 +2,9 @@
 using LPChat.Domain.Entities;
 using LPChat.Domain.Exceptions;
 using LPChat.Domain.Interfaces;
-using LPChat.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LPChat.Infrastructure.Services

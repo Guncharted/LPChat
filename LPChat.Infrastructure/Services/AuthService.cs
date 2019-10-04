@@ -3,7 +3,6 @@ using LPChat.Domain.Entities;
 using LPChat.Domain.Exceptions;
 using LPChat.Domain.Interfaces;
 using LPChat.Domain.Results;
-using LPChat.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -15,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace LPChat.Infrastructure.Services
 {
-    public class AuthService : IAuthService
+	public class AuthService : IAuthService
     {
         private readonly IConfiguration _config;
 		private readonly IRepositoryManager _repoManager;
