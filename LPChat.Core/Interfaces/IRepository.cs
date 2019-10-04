@@ -14,6 +14,6 @@ namespace LPChat.Domain.Interfaces
         Task<IEnumerable<T>> GetAsync();
         Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate);
         Task RemoveAsync(T item);
-        Task UpdateAsync(T item);
+        Task<long> UpdateAsync(T item);
     }
 }

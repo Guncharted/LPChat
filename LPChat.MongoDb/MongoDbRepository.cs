@@ -1,4 +1,5 @@
-﻿using LPChat.Domain.Interfaces;
+﻿using LPChat.Domain.Exceptions;
+using LPChat.Domain.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -9,63 +10,74 @@ using System.Threading.Tasks;
 
 namespace LPChat.MongoDb
 {
-    public class MongoDbRepository<T> : IRepository<T>
-        where T : class, IEntity
-    {
-        public IMongoCollection<T> MongoCollection { get; }
+	public class MongoDbRepository<T> : IRepository<T>
+		where T : class, IEntity
+	{
+		public IMongoCollection<T> MongoCollection { get; }
 
-        public MongoDbRepository(string dbName, string collectionName, string dbUrl)
-        {
-            var mongoClient = new MongoClient(dbUrl);
-            var mongoDatabase = mongoClient.GetDatabase(dbName);
+		public MongoDbRepository(string dbName, string collectionName, string dbUrl)
+		{
+			var mongoClient = new MongoClient(dbUrl);
+			var mongoDatabase = mongoClient.GetDatabase(dbName);
 
-            MongoCollection = mongoDatabase.GetCollection<T>(collectionName);
-        }
+			MongoCollection = mongoDatabase.GetCollection<T>(collectionName);
+		}
 
-        public async Task CreateAsync(T item)
-        {
-            await MongoCollection.InsertOneAsync(item);
-        }
+		public async Task CreateAsync(T item)
+		{
+			await MongoCollection.InsertOneAsync(item);
+		}
 
-        public async Task<T> FindById(Guid id)
-        {
-            var dbResult = await MongoCollection.FindAsync(i => i.ID == id);
-            var item = dbResult.ToList().FirstOrDefault();
-            return item;
-        }
+		public async Task<T> FindById(Guid id)
+		{
+			var dbResult = await MongoCollection.FindAsync(i => i.ID == id);
+			var item = dbResult.ToList().FirstOrDefault();
+			return item;
+		}
 
-        public async Task<IEnumerable<T>> GetAsync()
-        {
-            var resultList = new List<T>();
+		public async Task<IEnumerable<T>> GetAsync()
+		{
+			var dbList = await MongoCollection.FindAsync(new BsonDocument());
+			var resultList = dbList.ToList();
+			return resultList;
+		}
 
-            var dbList = await MongoCollection.FindAsync(new BsonDocument());
+		public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate)
+		{
+			var resultList = new List<T>();
+			var dbList = await MongoCollection.FindAsync(predicate);
 
-            resultList = dbList.ToList();
-            return resultList;
-        }
+			resultList = dbList.ToList();
+			return resultList;
+		}
 
-        public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate)
-        {
-            var resultList = new List<T>();
-            var dbList = await MongoCollection.FindAsync(predicate);
+		public async Task RemoveAsync(T item)
+		{
+			var deleteResult = await MongoCollection.DeleteOneAsync(i => i.ID == item.ID);
 
-            resultList = dbList.ToList();
-            return resultList;
-        }
+			if (!deleteResult.IsAcknowledged)
+				throw new BsonException("Failed to remove entry.");
+		}
 
-        public async Task RemoveAsync(T item)
-        {
-            var deleteResult = await MongoCollection.DeleteOneAsync(i => i.ID == item.ID);
+		public async Task<long> UpdateAsync(T item)
+		{
+			//TODO.Replace with GUARD
+			if (item == null)
+				throw new ArgumentNullException(nameof(item));
 
-            if (!deleteResult.IsAcknowledged)
-                throw new BsonException("Failed to remove entry.");
-        }
+			try
+			{
+				var oldDate = item.LastUpdatedUtcDate;
+				item.LastUpdatedUtcDate = DateTime.UtcNow;
+				var result = await MongoCollection.ReplaceOneAsync<T>(i => i.ID == item.ID && i.LastUpdatedUtcDate == oldDate, item);
 
-        public async Task UpdateAsync(T item)
-        {
-            var oldDate = item.LastUpdatedUtcDate;
-            item.LastUpdatedUtcDate = DateTime.UtcNow;
-            await MongoCollection.FindOneAndReplaceAsync(i => i.ID == item.ID && i.LastUpdatedUtcDate == oldDate, item);
-        }
-    }
+				return result.IsAcknowledged ? result.ModifiedCount : 0;
+			}
+			catch (Exception ex)
+			{
+				throw new DatabaseException("Database exception occurred", ex);
+			}
+
+		}
+	}
 }

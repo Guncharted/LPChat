@@ -13,100 +13,91 @@ using System.Threading.Tasks;
 
 namespace LPChat.Infrastructure.Services
 {
-    public class ChatService : IChatService
+	public class ChatService : IChatService
 	{
 		private readonly PersonInfoService _personInfoService;
 		private readonly IRepositoryManager _repoManager;
 
-        public ChatService(IRepositoryManager repoManager, PersonInfoService personInfoService)
-        {
+		public ChatService(IRepositoryManager repoManager, PersonInfoService personInfoService)
+		{
 			_personInfoService = personInfoService;
 			_repoManager = repoManager;
-        }
+		}
 
-        public async Task<OperationResult> Create(ChatForCreate chatForCreate)
-        {
-            var chat = new Chat(chatForCreate.IsPublic);
+		public async Task<OperationResult> Create(ChatForCreate chatForCreate)
+		{
+			var chat = new Chat(chatForCreate.IsPublic);
 
-            //PRIVATE CHAT: positive case - number of persons is 2
-            if (!chat.IsPublic && chatForCreate.PersonIds.Count() == 2)
-            {
-                //check to avoid duplicate private chats
-                var chatExists = await PrivateChatExists(chatForCreate.PersonIds);
+			//PRIVATE CHAT: positive case - number of persons is 2
+			if (!chat.IsPublic && chatForCreate.PersonIds.Count() == 2)
+			{
+				//check to avoid duplicate private chats
+				var chatExists = await PrivateChatExists(chatForCreate.PersonIds);
 
-                //if exists, then return creation error
-                if (chatExists)
-                {
+				//if exists, then return creation error
+				if (chatExists)
+				{
 					throw new ChatAppException("Chat already exists.");
-                }
-            }
-            //PRIVATE CHAT: case of incorrect number of persons
-            else if (!chat.IsPublic && chatForCreate.PersonIds.Count() != 2)
-            {
+				}
+			}
+			//PRIVATE CHAT: case of incorrect number of persons
+			else if (!chat.IsPublic && chatForCreate.PersonIds.Count() != 2)
+			{
 				throw new ChatAppException("Failed to create private chat - incorrect number of persons");
-            }
+			}
 
-            chat.Name = chatForCreate.Name;
-            chat.PersonIds = chatForCreate.PersonIds;
+			chat.Name = chatForCreate.Name;
+			chat.PersonIds = chatForCreate.PersonIds;
 			chat.LastUpdatedUtcDate = DateTime.UtcNow;
 
-            //await _chatContext.Insert(chat);
+			//await _chatContext.Insert(chat);
 
 			var repository = _repoManager.GetRepository<Chat>();
 			await repository.CreateAsync(chat);
 
-            return new OperationResult(true, "Chat has been created!", chat);
-        }
+			return new OperationResult(true, "Chat has been created!", chat);
+		}
 
-        public async Task<OperationResult> UpdatePersonList(ChatState newChatState)
-        {
+		public async Task<OperationResult> UpdatePersonList(ChatState newChatState)
+		{
 			var repository = _repoManager.GetRepository<Chat>();
-            var chat = (await repository.GetAsync(c => c.ID == newChatState.ID))?.FirstOrDefault();
+			var chat = (await repository.GetAsync(c => c.ID == newChatState.ID))?.FirstOrDefault();
 
-            if (chat == null || chat.ID != newChatState.ID || !chat.IsPublic)
-            {
+			if (chat == null || chat.ID != newChatState.ID || !chat.IsPublic)
+			{
 				throw new ChatAppException("Unable to update user list");
-            }
+			}
 
-            //creating new list of persons to rewrite based on specified action
+			//creating new list of persons to rewrite based on specified action
 			//TODO.add check for existing users
-            var newPersonIdsList = newChatState.PersonIds.Distinct();
-
-			////creating definition
-			//var updateDef = Builders<Chat>.Update
-			//	.Set(c => c.PersonIds, newPersonIdsList)
-			//	.Set(c => c.LastUpdatedUtcDate, DateTime.UtcNow);
-
-            //try update
-            //var result = await _chatContext
-			//	.UpdateOneAsync(c => c.ID == newChatState.ID && c.LastUpdatedUtcDate == chat.LastUpdatedUtcDate, updateDef);
+			var newPersonIdsList = newChatState.PersonIds.Distinct();
 
 			chat.PersonIds = newPersonIdsList;
-			await repository.UpdateAsync(chat);
+			var result = await repository.UpdateAsync(chat);
 
-            if (result.ModifiedCount > 0)
-            {
-                return new OperationResult(true, "Users list has been updated");
-            }
+			if (result > 0)
+			{
+				return new OperationResult(true, "Users list has been updated");
+			}
 
 			throw new ChatAppException("Failed to update user list");
-        }
+		}
 
 		//for current chat
-        public void GetChatInfo(Guid chatId)
-        {
-			//determine use cases first
-        }
+		public void GetChatInfo(Guid chatId)
+		{
+			throw new NotImplementedException();
+		}
 
 		//for sidebar
 		public async Task<IEnumerable<ChatInfo>> GetPersonChatList(Guid personId)
 		{
-			var chats = await _chatContext.GetAsync(c => c.PersonIds.Contains(personId));
+			var repository = _repoManager.GetRepository<Chat>();
+			var chats = (await repository.GetAsync(c => c.PersonIds.Contains(personId))).ToList();
 
 			if (chats.Count == 0)
-			{
 				return new List<ChatInfo>();
-			}
+
 
 			if (chats.Any(c => !c.IsPublic))
 			{
@@ -140,15 +131,13 @@ namespace LPChat.Infrastructure.Services
 			return chatList;
 		}
 
-        private async Task<bool> PrivateChatExists(IEnumerable<Guid> userIds)
-        {
+		private async Task<bool> PrivateChatExists(IEnumerable<Guid> userIds)
+		{
 			var repository = _repoManager.GetRepository<Chat>();
-            var result = await repository
+			var result = await repository
 				.GetAsync(c => !c.IsPublic && userIds.All(uid => c.PersonIds.Contains(uid)));
 
-            return result.Count() > 0 ? true : false;
-        }
-
-
-    }
+			return result.Count() > 0 ? true : false;
+		}
+	}
 }
