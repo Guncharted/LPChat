@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace LPChat.Domain.Exceptions
 {
+	[Serializable]
 	public class PasswordMismatchException : Exception
 	{
-		public PasswordMismatchException(string message) : base (message)
-		{
-		}
+		public PasswordMismatchException() { }
 
-		public PasswordMismatchException(string message, Exception innerException) : base (message, innerException)
-		{
-		}
+		public PasswordMismatchException(string message) : base(message) { }
+
+		public PasswordMismatchException(string message, Exception innerException) : base(message, innerException) { }
+
+		protected PasswordMismatchException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 }
