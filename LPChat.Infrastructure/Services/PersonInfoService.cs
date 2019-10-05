@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LPChat.Infrastructure.Services
 {
-	public class PersonInfoService
+	public class PersonInfoService : IPersonInfoService
 	{
 		private readonly IRepositoryManager _repoManager;
 
@@ -21,7 +21,7 @@ namespace LPChat.Infrastructure.Services
 		public async Task<PersonInfo> GetOneAsync(Guid personId)
 		{
 			var repository = _repoManager.GetRepository<Person>();
-			var person = (await repository.GetAsync(p => p.ID == personId)).FirstOrDefault();
+			var person = await repository.FindById(personId);
 			
 			if (person == null)
 			{

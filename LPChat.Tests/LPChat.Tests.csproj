@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LPChat.Core\LPChat.Core.csproj" />
+    <ProjectReference Include="..\LPChat.Infrastructure\LPChat.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
