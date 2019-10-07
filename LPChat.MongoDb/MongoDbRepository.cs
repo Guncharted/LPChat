@@ -1,4 +1,5 @@
-﻿using LPChat.Domain.Exceptions;
+﻿using LPChat.Domain;
+using LPChat.Domain.Exceptions;
 using LPChat.Domain.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -61,9 +62,7 @@ namespace LPChat.MongoDb
 
         public async Task<long> UpdateAsync(T item)
         {
-            //TODO.Replace with GUARD
-            if (item == null)
-                throw new ArgumentNullException(nameof(item));
+            Guard.NotNull(item, nameof(item));
 
             try
             {
@@ -77,7 +76,6 @@ namespace LPChat.MongoDb
             {
                 throw new DatabaseException("Database exception occurred", ex);
             }
-
         }
     }
 }
