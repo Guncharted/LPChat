@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 using System.Net;
 
 namespace LPChat
@@ -49,8 +50,8 @@ namespace LPChat
 						context.Response.Headers.Add("Application-Error", error.Error.Message);
 						context.Response.Headers.Add("Access-Control-Expose-Headers", "Application-Error");
 
-						await context.Response.WriteAsync(error.Error.Message);
-					}
+                        await context.Response.WriteAsync(error.Error.Message);
+                    }
 				});
 			});
 

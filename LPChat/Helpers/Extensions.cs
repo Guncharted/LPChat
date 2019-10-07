@@ -17,6 +17,7 @@ namespace LPChat.Helpers
             services.AddSingleton<IMessageService, MessageService>();
             services.AddScoped<IAuthService, AuthService>();
 			services.AddScoped<IChatService, ChatService>();
+            services.AddScoped<IPersonInfoService, PersonInfoService>();
 
             services
                 .AddSingleton<IRepositoryManager, ReposiotoryManager>(x => new ReposiotoryManager("cchat", configuration.GetConnectionString("MongoLocal")));

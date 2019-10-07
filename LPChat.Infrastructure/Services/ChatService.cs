@@ -13,10 +13,10 @@ namespace LPChat.Infrastructure.Services
 {
 	public class ChatService : IChatService
 	{
-		private readonly PersonInfoService _personInfoService;
+		private readonly IPersonInfoService _personInfoService;
 		private readonly IRepositoryManager _repoManager;
 
-		public ChatService(IRepositoryManager repoManager, PersonInfoService personInfoService)
+		public ChatService(IRepositoryManager repoManager, IPersonInfoService personInfoService)
 		{
 			_personInfoService = personInfoService;
 			_repoManager = repoManager;

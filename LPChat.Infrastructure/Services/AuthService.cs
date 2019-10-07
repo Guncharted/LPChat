@@ -1,4 +1,5 @@
-﻿using LPChat.Domain.DTO;
+﻿using LPChat.Domain;
+using LPChat.Domain.DTO;
 using LPChat.Domain.Entities;
 using LPChat.Domain.Exceptions;
 using LPChat.Domain.Interfaces;
@@ -27,6 +28,8 @@ namespace LPChat.Infrastructure.Services
 
         public async Task<OperationResult> Register(UserForRegister userForRegister)
         {
+            Guard.NotNull(userForRegister, nameof(userForRegister));
+
             if (await PersonExists(userForRegister.Username.ToLower()))
             {
 				throw new DuplicateException("User already exists!");
@@ -52,6 +55,8 @@ namespace LPChat.Infrastructure.Services
 
         public async Task<OperationResult> Login(UserForLogin userForLoginDto)
         {
+            Guard.NotNull(userForLoginDto, nameof(userForLoginDto));
+
 			var repository = _repoManager.GetRepository<Person>();
             var persons = await repository.GetAsync(u => u.Username.ToUpper() == userForLoginDto.UserName.ToUpper());
             var person = persons.FirstOrDefault();
