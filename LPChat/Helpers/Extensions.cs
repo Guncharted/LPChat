@@ -20,7 +20,7 @@ namespace LPChat.Helpers
             services.AddScoped<IPersonInfoService, PersonInfoService>();
 
             services
-                .AddSingleton<IRepositoryManager, ReposiotoryManager>(x => new ReposiotoryManager("cchat", configuration.GetConnectionString("MongoLocal")));
+                .AddSingleton<IRepositoryManager, MongoReposiotoryManager>(x => new MongoReposiotoryManager("cchat", configuration.GetConnectionString("MongoLocal")));
 
             services.AddCors();
 

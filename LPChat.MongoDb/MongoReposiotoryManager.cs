@@ -5,12 +5,12 @@ using System.Text;
 
 namespace LPChat.MongoDb
 {
-    public class ReposiotoryManager : IRepositoryManager
+    public class MongoReposiotoryManager : IRepositoryManager
     {
         private string _dbName;
         private string _connectionString;
 
-        public ReposiotoryManager(string dbName, string connectionString)
+        public MongoReposiotoryManager(string dbName, string connectionString)
         {
             _dbName = dbName;
             _connectionString = connectionString;
