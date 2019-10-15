@@ -1,7 +1,11 @@
-﻿using LPChat.Domain.Interfaces;
+﻿using LPChat.Domain.DTO;
+using LPChat.Domain.Entities;
+using LPChat.Domain.Interfaces;
+using LPChat.Domain.Results;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LPChat.Infrastructure.Services
 {
@@ -16,16 +20,33 @@ namespace LPChat.Infrastructure.Services
             _messageService = messageService;
         }
 
-        public void CreateChat()
+        #region Messaging
+        public void AddMessage(Message message)
         {
-
+            _messageService.AddMessage(message);
         }
 
-        public void ChangeChat()
+        public List<Message> GetMessages(Message lastMessage)
         {
+            return _messageService.GetMessages(lastMessage);
+        }
+        #endregion
 
+        #region Chat Management
+        public async Task<OperationResult> CreateChat(ChatForCreate chatForCreate)
+        {
+            return await _chatService.Create(chatForCreate);
         }
 
+        public void GetChatInfo(Guid chatId)
+        {
+            _chatService.GetChatInfo(chatId);
+        }
 
+        public async Task<OperationResult> UpdatePersonList(ChatState newChatState)
+        {
+            return await _chatService.UpdatePersonList(newChatState);
+        }
+        #endregion
     }
 }

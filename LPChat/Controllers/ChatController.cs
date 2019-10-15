@@ -28,9 +28,9 @@ namespace LPChat.Controllers
         }
 
         [HttpGet("poll")]
-        public IActionResult Poll(DateTime? since = null)
+        public IActionResult Poll(Message lastMessage)
         {
-            var result = _messageService.GetMessages(since);
+            var result = _messageService.GetMessages(lastMessage);
 
             return Ok(result);
         }
