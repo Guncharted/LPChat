@@ -20,6 +20,7 @@ namespace LPChat.Domain.Entities
 
         [BsonRequired]
         public byte[] PasswordSalt { get; set; }
+        public DateTime CreatedUtcDate { get; set; }
 
         public DateTime LastUpdatedUtcDate { get; set; }
     }

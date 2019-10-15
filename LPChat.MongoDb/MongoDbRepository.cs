@@ -26,6 +26,7 @@ namespace LPChat.MongoDb
 
         public async Task CreateAsync(T item)
         {
+            item.CreatedUtcDate = DateTime.UtcNow;
             await Collection.InsertOneAsync(item);
         }
 

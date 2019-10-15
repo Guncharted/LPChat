@@ -9,6 +9,6 @@ namespace LPChat.Domain.Interfaces
         List<Message> Messages { get; }
 
         void AddMessage(Message message);
-        List<Message> GetMessages(DateTime? since);
+        List<Message> GetMessages(Message lastMessage);
     }
 }

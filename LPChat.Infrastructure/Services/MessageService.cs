@@ -10,10 +10,15 @@ namespace LPChat.Infrastructure.Services
     public class MessageService : IMessageService
     {
         private List<Message> _messages;
-
+        private readonly IRepositoryManager _repositoryManager;
         private readonly object threadLock = new object();
 
         public List<Message> Messages => _messages = _messages ?? new List<Message>();
+
+        public MessageService(IRepositoryManager repositoryManager)
+        {
+            _repositoryManager = repositoryManager;
+        }
 
         public void AddMessage(Message message)
         {
@@ -21,28 +26,23 @@ namespace LPChat.Infrastructure.Services
             {
                 throw new ArgumentNullException();
             }
-            message.CreatedUtcDate = DateTime.UtcNow;
 
+            var repo = _repositoryManager.GetRepository<Message>();
+            
             lock (threadLock)
             {
+                repo.CreateAsync(message);
                 Messages.Add(message);
             }
         }
 
-        public List<Message> GetMessages(DateTime? since)
+        public List<Message> GetMessages(Message lastMessage)
         {
-            if (since == null)
-            {
-                return Messages;
-            }
-
-            since = since.Value.ToUniversalTime();
-
             var startDate = DateTime.UtcNow;
 
             while (true)
             {
-                var messagesForReturn = Messages.Where(m => m.CreatedUtcDate >= since).ToList();
+                var messagesForReturn = Messages.Where(m => m.ChatId == lastMessage.ChatId && m.CreatedUtcDate > lastMessage.CreatedUtcDate).ToList();
 
                 if (messagesForReturn.Count > 0 || DateTime.UtcNow >= startDate + TimeSpan.FromMinutes(5))
                 {

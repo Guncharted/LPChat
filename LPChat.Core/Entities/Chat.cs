@@ -15,10 +15,11 @@ namespace LPChat.Domain.Entities
 
         [BsonRequired]
         public bool IsPublic { get; private set; }
+        public DateTime CreatedUtcDate { get; set; }
 
-		public DateTime LastUpdatedUtcDate { get; set; }
+        public DateTime LastUpdatedUtcDate { get; set; }
 
-		public Chat(bool isPublic)
+        public Chat(bool isPublic)
         {
             IsPublic = isPublic;
         }

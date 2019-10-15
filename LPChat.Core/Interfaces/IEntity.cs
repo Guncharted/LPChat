@@ -10,6 +10,7 @@ namespace LPChat.Domain.Interfaces
     {
         Guid ID { get; set; }
 
+        DateTime CreatedUtcDate { get; set; }
         DateTime LastUpdatedUtcDate { get; set; }
     }
 }
