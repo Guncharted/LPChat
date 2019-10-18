@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace LPChat.Controllers
 {
+    // Finalize the auth
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
