@@ -21,9 +21,10 @@ namespace LPChat.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult AddMessage(Message message)
+        public async Task<IActionResult> AddMessage(Message message)
         {
-            _messageService.AddMessage(message);
+            
+            await _messageService.AddMessage(message);
             return Ok();
         }
 

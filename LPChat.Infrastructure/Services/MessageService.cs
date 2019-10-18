@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace LPChat.Infrastructure.Services
 {
@@ -20,7 +21,7 @@ namespace LPChat.Infrastructure.Services
             _repositoryManager = repositoryManager;
         }
 
-        public void AddMessage(Message message)
+        public async Task AddMessage(Message message)
         {
             if (message == null)
             {
@@ -28,10 +29,10 @@ namespace LPChat.Infrastructure.Services
             }
 
             var repo = _repositoryManager.GetRepository<Message>();
-            
+
+            await repo.CreateAsync(message);
             lock (threadLock)
             {
-                repo.CreateAsync(message);
                 Messages.Add(message);
             }
         }

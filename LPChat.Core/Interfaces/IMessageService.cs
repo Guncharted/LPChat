@@ -1,6 +1,7 @@
 ﻿using LPChat.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LPChat.Domain.Interfaces
 {
@@ -8,7 +9,7 @@ namespace LPChat.Domain.Interfaces
     {
         List<Message> Messages { get; }
 
-        void AddMessage(Message message);
+        Task AddMessage(Message message);
         List<Message> GetMessages(Message lastMessage);
     }
 }
