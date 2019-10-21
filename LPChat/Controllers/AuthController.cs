@@ -1,11 +1,15 @@
 ﻿using LPChat.Domain.DTO;
 using LPChat.Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace LPChat.Controllers
 {
-    // Finalize the auth
+    //TODO. Finalize the auth
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -19,7 +23,7 @@ namespace LPChat.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLogin userForLogin)
         {
-            var result = await _authService.Login(userForLogin);
+            var result = await _authService.LoginAsync(userForLogin);
 
             if (result.Succeeded)
             {
@@ -32,7 +36,7 @@ namespace LPChat.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegister userForRegister)
         {
-            var result = await _authService.Register(userForRegister);
+            var result = await _authService.RegisterAsync(userForRegister);
 
             if (result.Succeeded)
             {
@@ -40,6 +44,20 @@ namespace LPChat.Controllers
             }
 
             return BadRequest(result);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> ChangePassword(UserPasswordChange user)
+        {
+            var requestorId = new Guid(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            var result = await _authService.ChangePasswordAsync(user, requestorId);
+            return Ok();
+        }
+
+        public IActionResult ResetPassword()
+        {
+            return Ok();
         }
     }
 }

@@ -15,24 +15,24 @@ using System.Threading.Tasks;
 
 namespace LPChat.Infrastructure.Services
 {
-	public class AuthService : IAuthService
+    public class AuthService : IAuthService
     {
         private readonly IConfiguration _config;
-		private readonly IRepositoryManager _repoManager;
+        private readonly IRepositoryManager _repoManager;
 
         public AuthService(IRepositoryManager repoManager, IConfiguration configuration)
         {
             _config = configuration;
-			_repoManager = repoManager;
+            _repoManager = repoManager;
         }
 
-        public async Task<OperationResult> Register(UserForRegister userForRegister)
+        public async Task<OperationResult> RegisterAsync(UserForRegister userForRegister)
         {
             Guard.NotNull(userForRegister, nameof(userForRegister));
 
             if (await PersonExists(userForRegister.Username.ToLower()))
             {
-				throw new DuplicateException("User already exists!");
+                throw new DuplicateException("User already exists!");
             }
 
             var person = new Person
@@ -46,30 +46,63 @@ namespace LPChat.Infrastructure.Services
 
             person.PasswordHash = passwordHash;
             person.PasswordSalt = passwordSalt;
- 
-			var repository = _repoManager.GetRepository<Person>();
-			await repository.CreateAsync(person);
+
+            var repository = _repoManager.GetRepository<Person>();
+            await repository.CreateAsync(person);
 
             return new OperationResult(true, "Registration succesful", payload: person.ID);
         }
 
-        public async Task<OperationResult> Login(UserForLogin userForLoginDto)
+        public async Task<OperationResult> LoginAsync(UserForLogin userForLoginDto)
         {
             Guard.NotNull(userForLoginDto, nameof(userForLoginDto));
 
-			var repository = _repoManager.GetRepository<Person>();
+            var repository = _repoManager.GetRepository<Person>();
             var persons = await repository.GetAsync(u => u.Username.ToUpper() == userForLoginDto.UserName.ToUpper());
             var person = persons.FirstOrDefault();
 
-			if (person == null)
-				throw new PersonNotFoundException("User not found.");
+            if (person == null)
+                throw new PersonNotFoundException("User not found.");
 
-			if (!VerifyPasswordHash(userForLoginDto.Password, person.PasswordHash, person.PasswordSalt))
-				throw new PasswordMismatchException("Wrong password!");
+            if (!VerifyPasswordHash(userForLoginDto.Password, person.PasswordHash, person.PasswordSalt))
+                throw new PasswordMismatchException("Wrong password!");
 
             var token = GenerateToken(person);
             var result = new OperationResult(true, "Logged in", token);
 
+            return result;
+        }
+
+        public async Task<OperationResult> ChangePasswordAsync(UserPasswordChange userDataNew) => await ChangePasswordAsync(userDataNew, null);
+        public async Task<OperationResult> ChangePasswordAsync(UserPasswordChange userDataNew, Guid? requestorId = null)
+        {
+            var validateRequestor = requestorId != null;
+            return await ChangePasswordAsync(userDataNew, validateRequestor, requestorId);
+        }
+
+        private async Task<OperationResult> ChangePasswordAsync(UserPasswordChange userDataNew, bool validateRequestor, Guid? requestorId)
+        {
+            if (userDataNew.NewPassword != userDataNew.ConfirmNewPassword)
+                throw new PasswordMismatchException("New password is not matching confirmation value");
+
+            var repository = _repoManager.GetRepository<Person>();
+            var user = (await repository.GetAsync(u => u.ID == userDataNew.ID)).FirstOrDefault();
+
+            Guard.NotNull(user, nameof(user));
+
+            if (validateRequestor && requestorId != user.ID)
+                throw new ChatAppException("Unauthorized attempt to change password");
+
+            if (!VerifyPasswordHash(userDataNew.OldPassword, user.PasswordHash, user.PasswordSalt))
+                throw new PasswordMismatchException("Wrong old password!");
+
+            CreatePasswordHash(userDataNew.NewPassword, out byte[] passwordHash, out byte[] passwordSalt);
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+
+            await repository.UpdateAsync(user);
+
+            var result = new OperationResult(true, "Password has been changed.");
             return result;
         }
 
@@ -123,8 +156,8 @@ namespace LPChat.Infrastructure.Services
 
         private async Task<bool> PersonExists(string username)
         {
-			var repository = _repoManager.GetRepository<Person>();
-			var persons = (await repository.GetAsync(u => u.Username.ToUpper() == username.ToUpper())).ToList();
+            var repository = _repoManager.GetRepository<Person>();
+            var persons = (await repository.GetAsync(u => u.Username.ToUpper() == username.ToUpper())).ToList();
 
             if (persons.Count > 0)
                 return true;
