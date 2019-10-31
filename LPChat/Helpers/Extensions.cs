@@ -1,11 +1,16 @@
 ﻿using LPChat.Domain.Interfaces;
 using LPChat.Infrastructure.Services;
+using LPChat.Middleware;
 using LPChat.MongoDb;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Net;
 using System.Text;
 
 namespace LPChat.Helpers
@@ -38,5 +43,10 @@ namespace LPChat.Helpers
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
+
+		public static IApplicationBuilder UseCustomExceptionHandler(this IApplicationBuilder builder)
+		{
+			return builder.UseMiddleware<ExceptionHandler>();
+		}
     }
 }

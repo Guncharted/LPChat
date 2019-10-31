@@ -38,24 +38,9 @@ namespace LPChat
                 //app.UseHsts();
             }
 
-			app.UseExceptionHandler((builder) =>
-			{
-				builder.Run(async context =>
-				{
-					context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-					var error = context.Features.Get<IExceptionHandlerFeature>();
+			app.UseCustomExceptionHandler();
 
-					if (error != null)
-					{
-						context.Response.Headers.Add("Application-Error", error.Error.Message);
-						context.Response.Headers.Add("Access-Control-Expose-Headers", "Application-Error");
-
-                        await context.Response.WriteAsync(error.Error.Message);
-                    }
-				});
-			});
-
-            app.UseCors(opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+			app.UseCors(opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseHttpsRedirection();
             app.UseMvc();
         }
