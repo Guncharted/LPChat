@@ -47,6 +47,7 @@ namespace LPChat.Controllers
         }
 
         [Authorize]
+		[HttpPost("changePassword")]
         public async Task<IActionResult> ChangePassword(UserPasswordChange user)
         {
             var requestorId = new Guid(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
@@ -55,6 +56,7 @@ namespace LPChat.Controllers
             return Ok();
         }
 
+		[HttpPost("resetPassword")]
         public IActionResult ResetPassword()
         {
             return Ok();
