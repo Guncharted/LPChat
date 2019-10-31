@@ -1,5 +1,5 @@
-﻿using LPChat.Domain.DTO;
-using LPChat.Domain.Interfaces;
+﻿using LPChat.Infrastructure.ViewModels;
+using LPChat.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,7 +21,7 @@ namespace LPChat.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserForLogin userForLogin)
+        public async Task<IActionResult> Login(UserLoginViewModel userForLogin)
         {
             var result = await _authService.LoginAsync(userForLogin);
 
@@ -34,7 +34,7 @@ namespace LPChat.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(UserForRegister userForRegister)
+        public async Task<IActionResult> Register(UserRegisterViewModel userForRegister)
         {
             var result = await _authService.RegisterAsync(userForRegister);
 
@@ -48,7 +48,7 @@ namespace LPChat.Controllers
 
         [Authorize]
 		[HttpPost("changePassword")]
-        public async Task<IActionResult> ChangePassword(UserPasswordChange user)
+        public async Task<IActionResult> ChangePassword(UserPasswordChangeViewModel user)
         {
             var requestorId = new Guid(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 

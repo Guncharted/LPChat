@@ -1,4 +1,5 @@
 ﻿using LPChat.Domain.Interfaces;
+using LPChat.Infrastructure.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,8 +8,8 @@ namespace LPChat.MongoDb
 {
     public class MongoReposiotoryManager : IRepositoryManager
     {
-        private string _dbName;
-        private string _connectionString;
+        private readonly string _dbName;
+        private readonly string _connectionString;
 
         public MongoReposiotoryManager(string dbName, string connectionString)
         {

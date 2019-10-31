@@ -1,7 +1,7 @@
-﻿using LPChat.Domain.DTO;
+﻿using LPChat.Infrastructure.ViewModels;
 using LPChat.Domain.Entities;
 using LPChat.Domain.Exceptions;
-using LPChat.Domain.Interfaces;
+using LPChat.Infrastructure.Interfaces;
 using LPChat.Domain.Results;
 using MongoDB.Driver;
 using System;
@@ -22,7 +22,7 @@ namespace LPChat.Infrastructure.Services
 			_repoManager = repoManager;
 		}
 
-		public async Task<OperationResult> Create(ChatForCreate chatForCreate)
+		public async Task<OperationResult> Create(ChatCreateViewModel chatForCreate)
 		{
 			var chat = new Chat(chatForCreate.IsPublic);
 
@@ -56,7 +56,7 @@ namespace LPChat.Infrastructure.Services
 			return new OperationResult(true, "Chat has been created!", chat);
 		}
 
-		public async Task<OperationResult> UpdatePersonList(ChatState newChatState)
+		public async Task<OperationResult> UpdatePersonList(ChatStateViewModel newChatState)
 		{
 			var repository = _repoManager.GetRepository<Chat>();
 			var chat = (await repository.GetAsync(c => c.ID == newChatState.ID))?.FirstOrDefault();
@@ -88,13 +88,13 @@ namespace LPChat.Infrastructure.Services
 		}
 
 		//for sidebar
-		public async Task<IEnumerable<ChatInfo>> GetPersonChatList(Guid personId)
+		public async Task<IEnumerable<ChatInfoViewModel>> GetPersonChatList(Guid personId)
 		{
 			var repository = _repoManager.GetRepository<Chat>();
 			var chats = (await repository.GetAsync(c => c.PersonIds.Contains(personId))).ToList();
 
 			if (chats.Count == 0)
-				return new List<ChatInfo>();
+				return new List<ChatInfoViewModel>();
 
 
 			if (chats.Any(c => !c.IsPublic))
@@ -119,7 +119,7 @@ namespace LPChat.Infrastructure.Services
 				});
 			}
 
-			var chatList = chats.Select(c => new ChatInfo
+			var chatList = chats.Select(c => new ChatInfoViewModel
 			{
 				ID = c.ID,
 				Name = c.Name,

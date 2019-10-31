@@ -1,6 +1,7 @@
 ﻿using LPChat.Domain;
 using LPChat.Domain.Exceptions;
 using LPChat.Domain.Interfaces;
+using LPChat.Infrastructure.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;

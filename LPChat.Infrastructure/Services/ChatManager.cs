@@ -1,6 +1,6 @@
-﻿using LPChat.Domain.DTO;
+﻿using LPChat.Infrastructure.ViewModels;
 using LPChat.Domain.Entities;
-using LPChat.Domain.Interfaces;
+using LPChat.Infrastructure.Interfaces;
 using LPChat.Domain.Results;
 using System;
 using System.Collections.Generic;
@@ -33,7 +33,7 @@ namespace LPChat.Infrastructure.Services
         #endregion
 
         #region Chat Management
-        public async Task<OperationResult> CreateChat(ChatForCreate chatForCreate)
+        public async Task<OperationResult> CreateChat(ChatCreateViewModel chatForCreate)
         {
             return await _chatService.Create(chatForCreate);
         }
@@ -43,7 +43,7 @@ namespace LPChat.Infrastructure.Services
             _chatService.GetChatInfo(chatId);
         }
 
-        public async Task<OperationResult> UpdatePersonList(ChatState newChatState)
+        public async Task<OperationResult> UpdatePersonList(ChatStateViewModel newChatState)
         {
             return await _chatService.UpdatePersonList(newChatState);
         }

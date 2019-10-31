@@ -1,4 +1,4 @@
-﻿using LPChat.Domain.Interfaces;
+﻿using LPChat.Infrastructure.Interfaces;
 using LPChat.Infrastructure.Services;
 using LPChat.Middleware;
 using LPChat.MongoDb;

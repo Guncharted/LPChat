@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LPChat.Domain.DTO
+namespace LPChat.Infrastructure.ViewModels
 {
-	public class PersonInfo
+	public class UserInfoViewModel
 	{
 		public Guid ID { get; set; }
 		public string Username { get; set; }
