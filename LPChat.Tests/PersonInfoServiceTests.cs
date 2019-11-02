@@ -4,6 +4,8 @@ using LPChat.Infrastructure.Services;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Tests
@@ -26,16 +28,22 @@ namespace Tests
 		public void Setup()
 		{
 			var id = singleUserTestId;
-
-			personRepository.Setup(x => x.FindById(It.IsAny<Guid>()))
-				.Returns(Task.FromResult(new Person
-				{
-					ID = id,
-					FirstName = "Oleg",
-					LastName = "Gonchar",
-					Username = "hanchar.aleh@gmail.com",
-					LastUpdatedUtcDate = DateTime.UtcNow
-				}));
+            var list = new List<Person> {
+                new Person
+                {
+                    ID = id,
+                    FirstName = "Oleg",
+                    LastName = "Gonchar",
+                    Username = "hanchar.aleh@gmail.com",
+                    LastUpdatedUtcDate = DateTime.UtcNow
+                }
+            };
+            personRepository.Setup(x => x.FindById(It.IsAny<Guid>()))
+                .Returns((Guid pId) => {
+                    var result = list.FirstOrDefault(x => x.ID == pId);
+                    return Task.FromResult(result);
+                });
+				
 
 			repoManager.Setup(x => x.GetRepository<Person>()).Returns(personRepository.Object);
 		}
