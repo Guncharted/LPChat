@@ -1,12 +1,8 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace LPChat.Domain.Interfaces
 {
-    public interface IEntity
+	public interface IEntity
     {
         Guid ID { get; set; }
 

@@ -3,14 +3,13 @@ using LPChat.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace LPChat.Controllers
 {
-    //TODO. Finalize the auth
-    [Route("api/[controller]")]
+	//TODO. Finalize the auth
+	[Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {

@@ -4,12 +4,11 @@ using LPChat.Infrastructure.Interfaces;
 using LPChat.Domain.Results;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace LPChat.Infrastructure.Services
 {
-    public class ChatManager
+	public class ChatManager
     {
         private readonly IChatService _chatService;
         private readonly IMessageService _messageService;

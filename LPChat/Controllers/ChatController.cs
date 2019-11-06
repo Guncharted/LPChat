@@ -2,12 +2,11 @@
 using LPChat.Domain.Entities;
 using LPChat.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace LPChat.Controllers
 {
-    [Route("api/[controller]")]
+	[Route("api/[controller]")]
     [ApiController]
     public class ChatController : ControllerBase
     {
