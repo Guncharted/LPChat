@@ -29,7 +29,7 @@ export class MessageEditorComponent implements OnInit {
   }
 
   getMessage(): Message {
-    if (!this.canSead()) {
+    if (!this.canSend()) {
       return null;
     }
     const message: Message = {
@@ -38,7 +38,7 @@ export class MessageEditorComponent implements OnInit {
     return message;
   }
 
-  canSead() {
+  canSend() {
     if (this.messageText !== null &&
       this.messageText !== undefined &&
       this.messageText.trim().length !== 0) {

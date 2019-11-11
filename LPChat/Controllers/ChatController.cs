@@ -3,6 +3,8 @@ using LPChat.Domain.Entities;
 using LPChat.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System;
+using System.Security.Claims;
 
 namespace LPChat.Controllers
 {
@@ -20,15 +22,16 @@ namespace LPChat.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> AddMessage(Message message)
+        public async Task<IActionResult> AddMessage(MessageViewModel message)
         {
-            
+            var authorId = new Guid(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            message.PersonId = authorId;
             await _messageService.AddMessage(message);
             return Ok();
         }
 
         [HttpGet("poll")]
-        public IActionResult Poll(Message lastMessage)
+        public IActionResult Poll(MessageViewModel lastMessage)
         {
             var result = _messageService.GetMessages(lastMessage);
 

@@ -1,5 +1,6 @@
 ﻿using LPChat.Domain.Entities;
 using LPChat.Infrastructure.Interfaces;
+using LPChat.Infrastructure.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,23 +22,33 @@ namespace LPChat.Infrastructure.Services
             _repositoryManager = repositoryManager;
         }
 
-        public async Task AddMessage(Message message)
+        public async Task AddMessage(MessageViewModel message)
         {
             if (message == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Message cannot be null!");
             }
+            
+            if (message.ChatId == null)
+            {
+                throw new ArgumentException("Chat ID cannot be null!");
+            }
+
+            var messageModel = new Message { 
+                Text = message.Text,
+                ChatId = message.ChatId.Value,
+            };
 
             var repo = _repositoryManager.GetRepository<Message>();
 
-            await repo.CreateAsync(message);
+            await repo.CreateAsync(messageModel);
             lock (threadLock)
             {
-                Messages.Add(message);
+                Messages.Add(messageModel);
             }
         }
 
-        public List<Message> GetMessages(Message lastMessage)
+        public List<Message> GetMessages(MessageViewModel lastMessage)
         {
             var startDate = DateTime.UtcNow;
 
