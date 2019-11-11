@@ -29,6 +29,7 @@ namespace LPChat.Helpers
 				.AddSingleton<IRepositoryManager, MongoReposiotoryManager>(x => new MongoReposiotoryManager("cchat", configuration.GetConnectionString("MongoLocal")));
 
 			services.AddCors();
+            services.AddMemoryCache();
 
 			services.AddSwaggerGen(c =>
 			{
