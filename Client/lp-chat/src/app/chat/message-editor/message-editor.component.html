@@ -3,9 +3,9 @@
   <div class="text-center">
     <div class="input-group">
       <input type="text" class="form-control" placeholder="Enter your message" (keydown.enter)="onSend()"
-        [(ngModel)]="message.text">
+        [(ngModel)]="messageText">
       <div class="input-group-append">
-        <button class="btn btn-primary" type="button" id="submit" (click)="onSend()">Send</button>
+        <button class="btn btn-primary" type="button" id="submit" [disabled]="!canSend()" (click)="onSend()">Send</button>
       </div>
     </div>
   </div>

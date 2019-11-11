@@ -11,33 +11,42 @@ export class MessageEditorComponent implements OnInit {
 
   constructor(private messageService: MessageService) { }
 
-  message: Message = new Message();
-
   messageText: string = '';
 
   ngOnInit() {
   }
 
   onSend() {
-
-    this.messageService.sendMessage(this.message)
-    .subscribe(() => {
-      this.message = new Message();
-    }, error => {
-      console.error(error);
-    })
+    const message = this.getMessage();
+    if (message !== null) {
+      this.messageService.sendMessage(message)
+        .subscribe(() => {
+          this.messageText = '';
+        }, error => {
+          console.error(error);
+        })
+    }
   }
 
   getMessage(): Message {
-    const message = new Message();
-
-    if (message.text === '') {
-      
+    if (!this.canSead()) {
+      return null;
     }
-
-    message.text = this.messageText;
-
+    const message: Message = {
+      text: this.messageText
+    };
     return message;
+  }
+
+  canSead() {
+    if (this.messageText !== null &&
+      this.messageText !== undefined &&
+      this.messageText.trim().length !== 0) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
 }

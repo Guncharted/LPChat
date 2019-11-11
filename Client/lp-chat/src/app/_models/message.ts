@@ -1,5 +1,3 @@
-export class Message {
-    person: string;
+export interface Message {
     text: string;
-    createdUtcDate: Date;
 }

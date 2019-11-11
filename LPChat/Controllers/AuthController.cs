@@ -55,6 +55,7 @@ namespace LPChat.Controllers
             return Ok();
         }
 
+        // TODO. Connect email service (SendGRID)
         public IActionResult ResetPassword()
         {
             return Ok();
