@@ -1,7 +1,7 @@
-﻿using LPChat.Domain.DTO;
+﻿using LPChat.Infrastructure.ViewModels;
 using LPChat.Domain.Entities;
 using LPChat.Domain.Exceptions;
-using LPChat.Domain.Interfaces;
+using LPChat.Infrastructure.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +18,7 @@ namespace LPChat.Infrastructure.Services
 			_repoManager = repoManager;
 		}
 
-		public async Task<PersonInfo> GetOneAsync(Guid personId)
+		public async Task<UserInfoViewModel> GetOneAsync(Guid personId)
 		{
 			var repository = _repoManager.GetRepository<Person>();
 			var person = await repository.FindById(personId);
@@ -33,7 +33,7 @@ namespace LPChat.Infrastructure.Services
 			return personInfo;
 		}
 
-		public async Task<IEnumerable<PersonInfo>> GetManyAsync(IEnumerable<Guid> IDs)
+		public async Task<IEnumerable<UserInfoViewModel>> GetManyAsync(IEnumerable<Guid> IDs)
 		{
 			var repository = _repoManager.GetRepository<Person>();
 			var persons = await repository.GetAsync(p => IDs.Contains(p.ID));
@@ -42,7 +42,7 @@ namespace LPChat.Infrastructure.Services
 			return personsInfo;
 		}
 
-		public string GetPersonDisplayName(PersonInfo personInfo)
+		public string GetPersonDisplayName(UserInfoViewModel personInfo)
 		{
 			if (string.IsNullOrWhiteSpace(personInfo.FirstName) || string.IsNullOrWhiteSpace(personInfo.LastName))
 			{
@@ -52,9 +52,9 @@ namespace LPChat.Infrastructure.Services
 			return string.Format($"{personInfo.FirstName} {personInfo.LastName}");
 		}
 
-		private PersonInfo MapToPersonInfo(Person person)
+		private UserInfoViewModel MapToPersonInfo(Person person)
 		{
-			var personInfo = new PersonInfo
+			var personInfo = new UserInfoViewModel
 			{
 				ID = person.ID,
 				Username = person.Username,

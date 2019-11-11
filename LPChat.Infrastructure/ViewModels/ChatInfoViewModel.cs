@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace LPChat.Domain.DTO
+namespace LPChat.Infrastructure.ViewModels
 {
-	public class ChatInfo
+	public class ChatInfoViewModel
 	{
 		public Guid ID { get; set; }
 		public string Name { get; set; }

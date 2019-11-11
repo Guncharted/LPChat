@@ -1,13 +1,12 @@
-﻿using LPChat.Domain.DTO;
+﻿using LPChat.Infrastructure.ViewModels;
 using LPChat.Domain.Entities;
-using LPChat.Domain.Interfaces;
+using LPChat.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace LPChat.Controllers
 {
-    [Route("api/[controller]")]
+	[Route("api/[controller]")]
     [ApiController]
     public class ChatController : ControllerBase
     {
@@ -37,7 +36,7 @@ namespace LPChat.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateNewChat(ChatForCreate chatForCreate)
+        public async Task<IActionResult> CreateNewChat(ChatCreateViewModel chatForCreate)
         {
 			var result = await _chatservice.Create(chatForCreate);
 
@@ -45,7 +44,7 @@ namespace LPChat.Controllers
 		}
 
         [HttpPost("updatePersons")]
-        public async Task<IActionResult> UpdatePersons(ChatState chatState)
+        public async Task<IActionResult> UpdatePersons(ChatStateViewModel chatState)
         {
             var result = await _chatservice.UpdatePersonList(chatState);
 

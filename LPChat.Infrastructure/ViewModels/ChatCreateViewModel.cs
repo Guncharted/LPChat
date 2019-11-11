@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace LPChat.Domain.DTO
+namespace LPChat.Infrastructure.ViewModels
 {
-    public class ChatForCreate
+    public class ChatCreateViewModel
     {
         [Required]
         public IEnumerable<Guid> PersonIds { get; set; }

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LPChat.Domain
 {
-    public class Guard
+	public class Guard
     {
         public static void NotNull(object value, string name)
         {

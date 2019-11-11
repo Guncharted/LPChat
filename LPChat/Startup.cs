@@ -1,16 +1,12 @@
 ﻿using LPChat.Helpers;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.IO;
-using System.Net;
 
 namespace LPChat
 {
-    public class Startup
+	public class Startup
     {
 		public Startup(IConfiguration configuration)
         {
@@ -38,24 +34,15 @@ namespace LPChat
                 //app.UseHsts();
             }
 
-			app.UseExceptionHandler((builder) =>
+			app.UseCustomExceptionHandler();
+
+			app.UseSwagger();
+			app.UseSwaggerUI(c =>
 			{
-				builder.Run(async context =>
-				{
-					context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-					var error = context.Features.Get<IExceptionHandlerFeature>();
-
-					if (error != null)
-					{
-						context.Response.Headers.Add("Application-Error", error.Error.Message);
-						context.Response.Headers.Add("Access-Control-Expose-Headers", "Application-Error");
-
-                        await context.Response.WriteAsync(error.Error.Message);
-                    }
-				});
+				c.SwaggerEndpoint("/swagger/v1/swagger.json", "LP Chat API");
 			});
 
-            app.UseCors(opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+			app.UseCors(opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseHttpsRedirection();
             app.UseMvc();
         }
