@@ -1,5 +1,6 @@
 ﻿using LPChat.Domain;
 using LPChat.Domain.Entities;
+using LPChat.Domain.Results;
 using LPChat.Infrastructure.Interfaces;
 using LPChat.Infrastructure.ViewModels;
 using System;
@@ -26,15 +27,15 @@ namespace LPChat.Infrastructure.Services
             _personInfoService = personInfoService;
         }
 
-        public async Task AddMessage(MessageViewModel message)
+        public async Task<OperationResult> AddMessage(MessageViewModel message)
         {
             Guard.NotNull(message, nameof(message));
             Guard.NotNull(message.ChatId, nameof(message.ChatId));
             Guard.NotNull(message.PersonId, nameof(message.PersonId));
 
             //TODO. Remove this sh*t and use Automapper
-            var messageModel = new Message 
-            { 
+            var messageModel = new Message
+            {
                 Text = message.Text,
                 ChatId = message.ChatId.Value,
                 PersonId = message.PersonId.Value
@@ -42,8 +43,10 @@ namespace LPChat.Infrastructure.Services
 
             var repo = _repositoryManager.GetRepository<Message>();
 
+            //adding message to Db
             await repo.CreateAsync(messageModel);
 
+            //retrieve person information for ViewModel
             var personInfo = await _personInfoService.GetOneAsync(message.PersonId.Value);
 
             //TODO. Remove this sh*t and use Automapper [2]
@@ -55,6 +58,13 @@ namespace LPChat.Infrastructure.Services
             {
                 Messages.Add(message);
             }
+
+            //create result
+            var result = message.ID != null && message.ID != Guid.Empty;
+            if (result)
+                return new OperationResult(result, "Created", message);
+            else
+                return new OperationResult(result, "Failed to create");
         }
 
         public List<MessageViewModel> GetMessages(MessageViewModel lastMessage)
