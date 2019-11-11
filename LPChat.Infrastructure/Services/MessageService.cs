@@ -29,7 +29,8 @@ namespace LPChat.Infrastructure.Services
             Guard.NotNull(message.ChatId, nameof(message.ChatId));
             Guard.NotNull(message.PersonId, nameof(message.PersonId));
 
-            var messageModel = new Message { 
+            var messageModel = new Message 
+            { 
                 Text = message.Text,
                 ChatId = message.ChatId.Value,
                 PersonId = message.PersonId.Value
