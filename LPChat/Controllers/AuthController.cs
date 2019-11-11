@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using LPChat.Helpers;
 
 namespace LPChat.Controllers
 {
@@ -49,7 +50,7 @@ namespace LPChat.Controllers
 		[HttpPost("changePassword")]
         public async Task<IActionResult> ChangePassword(UserPasswordChangeViewModel user)
         {
-            var requestorId = new Guid(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var requestorId = User.GetPersonId();
 
             var result = await _authService.ChangePasswordAsync(user, requestorId);
             return Ok();

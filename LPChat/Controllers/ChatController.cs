@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System;
 using System.Security.Claims;
+using LPChat.Helpers;
 
 namespace LPChat.Controllers
 {
@@ -24,8 +25,7 @@ namespace LPChat.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> AddMessage(MessageViewModel message)
         {
-            var authorId = new Guid(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            message.PersonId = authorId;
+            message.PersonId = User.GetPersonId();
             await _messageService.AddMessage(message);
             return Ok();
         }
