@@ -2,7 +2,7 @@
 
 namespace LPChat.Infrastructure.ViewModels
 {
-	public class UserInfoViewModel
+	public class PersonInfoViewModel
 	{
 		public Guid ID { get; set; }
 		public string Username { get; set; }

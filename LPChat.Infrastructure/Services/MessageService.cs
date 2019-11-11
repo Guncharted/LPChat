@@ -14,13 +14,15 @@ namespace LPChat.Infrastructure.Services
     {
         private List<Message> _messages;
         private readonly IRepositoryManager _repositoryManager;
+        private readonly IPersonInfoService _personInfoService;
         private readonly object threadLock = new object();
 
         public List<Message> Messages => _messages = _messages ?? new List<Message>();
 
-        public MessageService(IRepositoryManager repositoryManager)
+        public MessageService(IRepositoryManager repositoryManager, IPersonInfoService personInfoService)
         {
             _repositoryManager = repositoryManager;
+            _personInfoService = personInfoService;
         }
 
         public async Task AddMessage(MessageViewModel message)

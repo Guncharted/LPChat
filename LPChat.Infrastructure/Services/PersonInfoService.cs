@@ -18,7 +18,7 @@ namespace LPChat.Infrastructure.Services
 			_repoManager = repoManager;
 		}
 
-		public async Task<UserInfoViewModel> GetOneAsync(Guid personId)
+		public async Task<PersonInfoViewModel> GetOneAsync(Guid personId)
 		{
 			var repository = _repoManager.GetRepository<Person>();
 			var person = await repository.FindById(personId);
@@ -33,7 +33,7 @@ namespace LPChat.Infrastructure.Services
 			return personInfo;
 		}
 
-		public async Task<IEnumerable<UserInfoViewModel>> GetManyAsync(IEnumerable<Guid> IDs)
+		public async Task<IEnumerable<PersonInfoViewModel>> GetManyAsync(IEnumerable<Guid> IDs)
 		{
 			var repository = _repoManager.GetRepository<Person>();
 			var persons = await repository.GetAsync(p => IDs.Contains(p.ID));
@@ -42,7 +42,7 @@ namespace LPChat.Infrastructure.Services
 			return personsInfo;
 		}
 
-		public string GetPersonDisplayName(UserInfoViewModel personInfo)
+		public string GetPersonDisplayName(PersonInfoViewModel personInfo)
 		{
 			if (string.IsNullOrWhiteSpace(personInfo.FirstName) || string.IsNullOrWhiteSpace(personInfo.LastName))
 			{
@@ -52,9 +52,9 @@ namespace LPChat.Infrastructure.Services
 			return string.Format($"{personInfo.FirstName} {personInfo.LastName}");
 		}
 
-		private UserInfoViewModel MapToPersonInfo(Person person)
+		private PersonInfoViewModel MapToPersonInfo(Person person)
 		{
-			var personInfo = new UserInfoViewModel
+			var personInfo = new PersonInfoViewModel
 			{
 				ID = person.ID,
 				Username = person.Username,

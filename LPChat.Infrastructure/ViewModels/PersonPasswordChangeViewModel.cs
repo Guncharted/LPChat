@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LPChat.Infrastructure.ViewModels
 {
-	public class UserPasswordChangeViewModel
+	public class PersonPasswordChangeViewModel
     {
         [Required]
         public Guid ID { get; set; }

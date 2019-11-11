@@ -26,7 +26,7 @@ namespace LPChat.Infrastructure.Services
             _repoManager = repoManager;
         }
 
-        public async Task<OperationResult> RegisterAsync(UserRegisterViewModel userForRegister)
+        public async Task<OperationResult> RegisterAsync(PersonRegisterViewModel userForRegister)
         {
             Guard.NotNull(userForRegister, nameof(userForRegister));
 
@@ -53,7 +53,7 @@ namespace LPChat.Infrastructure.Services
             return new OperationResult(true, "Registration succesful", payload: person.ID);
         }
 
-        public async Task<OperationResult> LoginAsync(UserLoginViewModel userForLoginDto)
+        public async Task<OperationResult> LoginAsync(PersonLoginViewModel userForLoginDto)
         {
             Guard.NotNull(userForLoginDto, nameof(userForLoginDto));
 
@@ -73,14 +73,14 @@ namespace LPChat.Infrastructure.Services
             return result;
         }
 
-        public async Task<OperationResult> ChangePasswordAsync(UserPasswordChangeViewModel userDataNew) => await ChangePasswordAsync(userDataNew, null);
-        public async Task<OperationResult> ChangePasswordAsync(UserPasswordChangeViewModel userDataNew, Guid? requestorId = null)
+        public async Task<OperationResult> ChangePasswordAsync(PersonPasswordChangeViewModel userDataNew) => await ChangePasswordAsync(userDataNew, null);
+        public async Task<OperationResult> ChangePasswordAsync(PersonPasswordChangeViewModel userDataNew, Guid? requestorId = null)
         {
             var validateRequestor = requestorId != null;
             return await ChangePasswordAsync(userDataNew, validateRequestor, requestorId);
         }
 
-        private async Task<OperationResult> ChangePasswordAsync(UserPasswordChangeViewModel userDataNew, bool validateRequestor, Guid? requestorId)
+        private async Task<OperationResult> ChangePasswordAsync(PersonPasswordChangeViewModel userDataNew, bool validateRequestor, Guid? requestorId)
         {
             if (userDataNew.NewPassword != userDataNew.ConfirmNewPassword)
                 throw new PasswordMismatchException("New password is not matching confirmation value");

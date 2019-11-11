@@ -21,7 +21,7 @@ namespace LPChat.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserLoginViewModel userForLogin)
+        public async Task<IActionResult> Login(PersonLoginViewModel userForLogin)
         {
             var result = await _authService.LoginAsync(userForLogin);
 
@@ -34,7 +34,7 @@ namespace LPChat.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(UserRegisterViewModel userForRegister)
+        public async Task<IActionResult> Register(PersonRegisterViewModel userForRegister)
         {
             var result = await _authService.RegisterAsync(userForRegister);
 
@@ -48,7 +48,7 @@ namespace LPChat.Controllers
 
         [Authorize]
 		[HttpPost("changePassword")]
-        public async Task<IActionResult> ChangePassword(UserPasswordChangeViewModel user)
+        public async Task<IActionResult> ChangePassword(PersonPasswordChangeViewModel user)
         {
             var requestorId = User.GetPersonId();
 

@@ -2,7 +2,7 @@
 
 namespace LPChat.Infrastructure.ViewModels
 {
-    public class UserRegisterViewModel
+    public class PersonRegisterViewModel
     {
         [Required]
         public string Username { get; set; }
