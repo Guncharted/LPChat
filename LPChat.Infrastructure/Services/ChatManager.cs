@@ -20,12 +20,12 @@ namespace LPChat.Infrastructure.Services
         }
 
         #region Messaging
-        public void AddMessage(Message message)
+        public void AddMessage(MessageViewModel message)
         {
             _messageService.AddMessage(message);
         }
 
-        public List<Message> GetMessages(Message lastMessage)
+        public List<MessageViewModel> GetMessages(MessageViewModel lastMessage)
         {
             return _messageService.GetMessages(lastMessage);
         }

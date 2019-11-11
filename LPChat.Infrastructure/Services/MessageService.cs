@@ -12,12 +12,13 @@ namespace LPChat.Infrastructure.Services
 {
     public class MessageService : IMessageService
     {
-        private List<Message> _messages;
+        //TODO. To be removed and changed to memory cache
+        private List<MessageViewModel> _messages;
+        public List<MessageViewModel> Messages => _messages = _messages ?? new List<MessageViewModel>();
+
         private readonly IRepositoryManager _repositoryManager;
         private readonly IPersonInfoService _personInfoService;
         private readonly object threadLock = new object();
-
-        public List<Message> Messages => _messages = _messages ?? new List<Message>();
 
         public MessageService(IRepositoryManager repositoryManager, IPersonInfoService personInfoService)
         {
@@ -31,6 +32,7 @@ namespace LPChat.Infrastructure.Services
             Guard.NotNull(message.ChatId, nameof(message.ChatId));
             Guard.NotNull(message.PersonId, nameof(message.PersonId));
 
+            //TODO. Remove this sh*t and use Automapper
             var messageModel = new Message 
             { 
                 Text = message.Text,
@@ -41,13 +43,21 @@ namespace LPChat.Infrastructure.Services
             var repo = _repositoryManager.GetRepository<Message>();
 
             await repo.CreateAsync(messageModel);
+
+            var personInfo = await _personInfoService.GetOneAsync(message.PersonId.Value);
+
+            //TODO. Remove this sh*t and use Automapper [2]
+            message.ID = messageModel.ID;
+            message.CreatedUtcDate = messageModel.CreatedUtcDate;
+            message.PersonName = _personInfoService.GetPersonDisplayName(personInfo);
+
             lock (threadLock)
             {
-                Messages.Add(messageModel);
+                Messages.Add(message);
             }
         }
 
-        public List<Message> GetMessages(MessageViewModel lastMessage)
+        public List<MessageViewModel> GetMessages(MessageViewModel lastMessage)
         {
             var startDate = DateTime.UtcNow;
 
