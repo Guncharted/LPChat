@@ -7,8 +7,8 @@ namespace LPChat.Infrastructure.Interfaces
 {
 	public interface IPersonInfoService
 	{
-		Task<IEnumerable<PersonInfoViewModel>> GetManyAsync(IEnumerable<Guid> IDs);
-		Task<PersonInfoViewModel> GetOneAsync(Guid personId);
-		string GetPersonDisplayName(PersonInfoViewModel personInfo);
+		Task<IEnumerable<UserModel>> GetManyAsync(IEnumerable<Guid> IDs);
+		Task<UserModel> GetOneAsync(Guid personId);
+		string GetPersonDisplayName(UserModel personInfo);
 	}
 }

@@ -22,7 +22,7 @@ namespace LPChat.Infrastructure.Services
 			_repoManager = repoManager;
 		}
 
-		public async Task<OperationResult> Create(ChatCreateViewModel chatForCreate)
+		public async Task<OperationResult> Create(ChatModel chatForCreate)
 		{
 			var chat = new Chat(chatForCreate.IsPublic);
 

@@ -35,7 +35,7 @@ namespace LPChat.Infrastructure.Services
                 throw new DuplicateException("User already exists!");
             }
 
-            var person = new Person
+            var person = new User
             {
                 Username = userForRegister.Username,
                 FirstName = userForRegister.FirstName,
@@ -47,7 +47,7 @@ namespace LPChat.Infrastructure.Services
             person.PasswordHash = passwordHash;
             person.PasswordSalt = passwordSalt;
 
-            var repository = _repoManager.GetRepository<Person>();
+            var repository = _repoManager.GetRepository<User>();
             await repository.CreateAsync(person);
 
             return new OperationResult(true, "Registration succesful", payload: person.ID);
@@ -57,7 +57,7 @@ namespace LPChat.Infrastructure.Services
         {
             Guard.NotNull(userForLoginDto, nameof(userForLoginDto));
 
-            var repository = _repoManager.GetRepository<Person>();
+            var repository = _repoManager.GetRepository<User>();
             var persons = await repository.GetAsync(u => u.Username.ToUpper() == userForLoginDto.UserName.ToUpper());
             var person = persons.FirstOrDefault();
 
@@ -73,19 +73,19 @@ namespace LPChat.Infrastructure.Services
             return result;
         }
 
-        public async Task<OperationResult> ChangePasswordAsync(PersonPasswordChangeViewModel userDataNew) => await ChangePasswordAsync(userDataNew, null);
-        public async Task<OperationResult> ChangePasswordAsync(PersonPasswordChangeViewModel userDataNew, Guid? requestorId = null)
+        public async Task<OperationResult> ChangePasswordAsync(UserSecurityModel userDataNew) => await ChangePasswordAsync(userDataNew, null);
+        public async Task<OperationResult> ChangePasswordAsync(UserSecurityModel userDataNew, Guid? requestorId = null)
         {
             var validateRequestor = requestorId != null;
             return await ChangePasswordAsync(userDataNew, validateRequestor, requestorId);
         }
 
-        private async Task<OperationResult> ChangePasswordAsync(PersonPasswordChangeViewModel userDataNew, bool validateRequestor, Guid? requestorId)
+        private async Task<OperationResult> ChangePasswordAsync(UserSecurityModel userDataNew, bool validateRequestor, Guid? requestorId)
         {
-            if (userDataNew.NewPassword != userDataNew.ConfirmNewPassword)
+            if (userDataNew.Password != userDataNew.ConfirmPassword)
                 throw new PasswordMismatchException("New password is not matching confirmation value");
 
-            var repository = _repoManager.GetRepository<Person>();
+            var repository = _repoManager.GetRepository<User>();
             var user = (await repository.GetAsync(u => u.ID == userDataNew.ID)).FirstOrDefault();
 
             Guard.NotNull(user, nameof(user));
@@ -96,7 +96,7 @@ namespace LPChat.Infrastructure.Services
             if (!VerifyPasswordHash(userDataNew.OldPassword, user.PasswordHash, user.PasswordSalt))
                 throw new PasswordMismatchException("Wrong old password!");
 
-            CreatePasswordHash(userDataNew.NewPassword, out byte[] passwordHash, out byte[] passwordSalt);
+            CreatePasswordHash(userDataNew.Password, out byte[] passwordHash, out byte[] passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
@@ -115,7 +115,7 @@ namespace LPChat.Infrastructure.Services
             }
         }
 
-        private string GenerateToken(Person person)
+        private string GenerateToken(User person)
         {
             var claims = GetClaimsIdentity(person);
 
@@ -156,7 +156,7 @@ namespace LPChat.Infrastructure.Services
 
         private async Task<bool> PersonExists(string username)
         {
-            var repository = _repoManager.GetRepository<Person>();
+            var repository = _repoManager.GetRepository<User>();
             var persons = (await repository.GetAsync(u => u.Username.ToUpper() == username.ToUpper())).ToList();
 
             if (persons.Count > 0)
@@ -165,7 +165,7 @@ namespace LPChat.Infrastructure.Services
             return false;
         }
 
-        private ClaimsIdentity GetClaimsIdentity(Person person)
+        private ClaimsIdentity GetClaimsIdentity(User person)
         {
             //array of claims (to PAYLOAD:DATA)
             var claims = new[]

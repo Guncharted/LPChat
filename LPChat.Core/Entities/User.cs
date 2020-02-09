@@ -4,7 +4,7 @@ using System;
 
 namespace LPChat.Domain.Entities
 {
-    public class Person : IEntity
+    public class User : IEntity
     {
         [BsonId]
         public Guid ID { get; set; }
@@ -20,6 +20,7 @@ namespace LPChat.Domain.Entities
 
         [BsonRequired]
         public byte[] PasswordSalt { get; set; }
+
         public DateTime CreatedUtcDate { get; set; }
 
         public DateTime LastUpdatedUtcDate { get; set; }

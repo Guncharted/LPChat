@@ -14,8 +14,8 @@ namespace LPChat.Infrastructure.Services
     public class MessageService : IMessageService
     {
         //TODO. To be removed and changed to memory cache
-        private List<MessageViewModel> _messages;
-        public List<MessageViewModel> Messages => _messages = _messages ?? new List<MessageViewModel>();
+        private List<MessageModel> _messages;
+        public List<MessageModel> Messages => _messages = _messages ?? new List<MessageModel>();
 
         private readonly IRepositoryManager _repositoryManager;
         private readonly IPersonInfoService _personInfoService;
@@ -27,7 +27,7 @@ namespace LPChat.Infrastructure.Services
             _personInfoService = personInfoService;
         }
 
-        public async Task<OperationResult> AddMessage(MessageViewModel message)
+        public async Task<OperationResult> AddMessage(MessageModel message)
         {
             Guard.NotNull(message, nameof(message));
             Guard.NotNull(message.ChatId, nameof(message.ChatId));
@@ -67,7 +67,7 @@ namespace LPChat.Infrastructure.Services
                 return new OperationResult(result, "Failed to create");
         }
 
-        public List<MessageViewModel> GetMessages(MessageViewModel lastMessage)
+        public List<MessageModel> GetMessages(MessageModel lastMessage)
         {
             var startDate = DateTime.UtcNow;
 

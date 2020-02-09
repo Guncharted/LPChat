@@ -31,18 +31,18 @@ namespace LPChat.Helpers
 			services.AddCors();
             services.AddMemoryCache();
 
-			services.AddSwaggerGen(c =>
-			{
-				c.SwaggerDoc("v1", new Info { Title = "LP Chat", Version = "v1" });
-				c.DescribeAllEnumsAsStrings();
-				c.DocInclusionPredicate((doc, api) => true);
-				c.CustomSchemaIds(x => x.FullName);
-				var xmlDocFile = Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
-				if (File.Exists(xmlDocFile))
-				{
-					c.IncludeXmlComments(xmlDocFile);
-				}
-			});
+			//services.AddSwaggerGen(c =>
+			//{
+			//	c.SwaggerDoc("v1", Microsoft.OpenApi.ope { Title = "LP Chat", Version = "v1" });
+			//	c.DescribeAllEnumsAsStrings();
+			//	c.DocInclusionPredicate((doc, api) => true);
+			//	c.CustomSchemaIds(x => x.FullName);
+			//	var xmlDocFile = Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
+			//	if (File.Exists(xmlDocFile))
+			//	{
+			//		c.IncludeXmlComments(xmlDocFile);
+			//	}
+			//});
 
 			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 				.AddJwtBearer(options =>
@@ -56,7 +56,7 @@ namespace LPChat.Helpers
 					};
 				});
 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+			services.AddMvc(options => options.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 		}
 
 		public static IApplicationBuilder UseCustomExceptionHandler(this IApplicationBuilder builder)

@@ -9,7 +9,7 @@ namespace LPChat.Infrastructure.Interfaces
     {
         Task<OperationResult> LoginAsync(PersonLoginViewModel userForLogin);
         Task<OperationResult> RegisterAsync(PersonRegisterViewModel userForRegister);
-        Task<OperationResult> ChangePasswordAsync(PersonPasswordChangeViewModel user);
-        Task<OperationResult> ChangePasswordAsync(PersonPasswordChangeViewModel user, Guid? requestorId);
+        Task<OperationResult> ChangePasswordAsync(UserSecurityModel user);
+        Task<OperationResult> ChangePasswordAsync(UserSecurityModel user, Guid? requestorId);
     }
 }

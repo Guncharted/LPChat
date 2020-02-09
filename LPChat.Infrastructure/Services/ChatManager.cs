@@ -20,19 +20,19 @@ namespace LPChat.Infrastructure.Services
         }
 
         #region Messaging
-        public void AddMessage(MessageViewModel message)
+        public void AddMessage(MessageModel message)
         {
             _messageService.AddMessage(message);
         }
 
-        public List<MessageViewModel> GetMessages(MessageViewModel lastMessage)
+        public List<MessageModel> GetMessages(MessageModel lastMessage)
         {
             return _messageService.GetMessages(lastMessage);
         }
         #endregion
 
         #region Chat Management
-        public async Task<OperationResult> CreateChat(ChatCreateViewModel chatForCreate)
+        public async Task<OperationResult> CreateChat(ChatModel chatForCreate)
         {
             return await _chatService.Create(chatForCreate);
         }

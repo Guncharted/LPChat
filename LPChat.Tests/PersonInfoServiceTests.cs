@@ -13,14 +13,14 @@ namespace Tests
 	public class PersonInfoServiceTests
 	{
 		private readonly Mock<IRepositoryManager> repoManager;
-		private readonly Mock<IRepository<Person>> personRepository;
+		private readonly Mock<IRepository<User>> personRepository;
 
 		private readonly Guid singleUserTestId;
 
 		public PersonInfoServiceTests()
 		{
 			repoManager = new Mock<IRepositoryManager>();
-			personRepository = new Mock<IRepository<Person>>();
+			personRepository = new Mock<IRepository<User>>();
 			singleUserTestId = new Guid();
 		}
 
@@ -28,8 +28,8 @@ namespace Tests
 		public void Setup()
 		{
 			var id = singleUserTestId;
-            var list = new List<Person> {
-                new Person
+            var list = new List<User> {
+                new User
                 {
                     ID = id,
                     FirstName = "Oleg",
@@ -45,13 +45,13 @@ namespace Tests
                 });
 				
 
-			repoManager.Setup(x => x.GetRepository<Person>()).Returns(personRepository.Object);
+			repoManager.Setup(x => x.GetRepository<User>()).Returns(personRepository.Object);
 		}
 
 		[Test]
 		public void GetOneUserById()
 		{
-			var personService = new PersonInfoService(repoManager.Object);
+			var personService = new PersonInfoService(repoManager.Object, null);
 			var person = personService.GetOneAsync(singleUserTestId).Result;
 			Assert.AreEqual("hanchar.aleh@gmail.com", person.Username);
 			Assert.AreEqual("Oleg", person.FirstName);
