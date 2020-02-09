@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LPChat.Infrastructure.Models
+namespace LPChat.Common.Models
 {
     public class MessageModel
     {

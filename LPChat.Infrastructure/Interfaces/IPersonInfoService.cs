@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LPChat.Infrastructure.ViewModels;
+using LPChat.Common.Models;
 
 namespace LPChat.Infrastructure.Interfaces
 {

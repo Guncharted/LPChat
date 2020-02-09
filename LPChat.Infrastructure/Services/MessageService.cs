@@ -1,9 +1,9 @@
 ﻿using LPChat.Common.DbContracts;
+using LPChat.Common.Models;
 using LPChat.Data.MongoDb.Entities;
 using LPChat.Domain;
 using LPChat.Domain.Results;
 using LPChat.Infrastructure.Interfaces;
-using LPChat.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

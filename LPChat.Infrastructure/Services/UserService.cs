@@ -1,5 +1,4 @@
-﻿using LPChat.Infrastructure.ViewModels;
-using LPChat.Infrastructure.Interfaces;
+﻿using LPChat.Infrastructure.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +7,7 @@ using Microsoft.Extensions.Caching.Memory;
 using LPChat.Common.DbContracts;
 using LPChat.Data.MongoDb.Entities;
 using LPChat.Common.Exceptions;
+using LPChat.Common.Models;
 
 namespace LPChat.Infrastructure.Services
 {

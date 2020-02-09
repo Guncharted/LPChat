@@ -1,5 +1,5 @@
-﻿using LPChat.Domain.Results;
-using LPChat.Infrastructure.Models;
+﻿using LPChat.Common.Models;
+using LPChat.Domain.Results;
 using System;
 using System.Threading.Tasks;
 

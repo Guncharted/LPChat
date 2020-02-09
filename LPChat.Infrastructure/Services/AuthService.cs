@@ -1,5 +1,4 @@
 ﻿using LPChat.Domain;
-using LPChat.Infrastructure.ViewModels;
 using LPChat.Infrastructure.Interfaces;
 using LPChat.Domain.Results;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +12,7 @@ using System.Threading.Tasks;
 using LPChat.Common.Exceptions;
 using LPChat.Data.MongoDb.Entities;
 using LPChat.Common.DbContracts;
+using LPChat.Common.Models;
 
 namespace LPChat.Infrastructure.Services
 {
@@ -160,7 +160,7 @@ namespace LPChat.Infrastructure.Services
         private async Task<bool> PersonExists(string username)
         {
             var repository = _repoManager.GetRepository<User>();
-            var persons = (await repository.GetAsync(u => u.Username.ToUpper() == username.ToUpper())).ToList();
+            var persons = (await repository.GetAsync(u => string.Compare(u.Username, username, StringComparison.CurrentCultureIgnoreCase) == 0)).ToList();
 
             if (persons.Count > 0)
                 return true;

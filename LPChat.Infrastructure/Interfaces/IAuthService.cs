@@ -1,7 +1,7 @@
-﻿using LPChat.Infrastructure.ViewModels;
-using LPChat.Domain.Results;
+﻿using LPChat.Domain.Results;
 using System;
 using System.Threading.Tasks;
+using LPChat.Common.Models;
 
 namespace LPChat.Infrastructure.Interfaces
 {

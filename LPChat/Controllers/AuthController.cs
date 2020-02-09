@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LPChat.Common.Models;
 using LPChat.Infrastructure;
 using LPChat.Infrastructure.Interfaces;
 using LPChat.Infrastructure.ViewModels;
