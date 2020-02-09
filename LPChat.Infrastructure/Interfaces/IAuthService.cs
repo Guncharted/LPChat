@@ -7,8 +7,8 @@ namespace LPChat.Infrastructure.Interfaces
 {
     public interface IAuthService
     {
-        Task<OperationResult> LoginAsync(PersonLoginViewModel userForLogin);
-        Task<OperationResult> RegisterAsync(PersonRegisterViewModel userForRegister);
+        Task<OperationResult> LoginAsync(UserSecurityModel userForLogin);
+        Task<OperationResult> RegisterAsync(UserSecurityModel userForRegister);
         Task<OperationResult> ChangePasswordAsync(UserSecurityModel user);
         Task<OperationResult> ChangePasswordAsync(UserSecurityModel user, Guid? requestorId);
     }

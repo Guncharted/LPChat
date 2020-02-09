@@ -2,7 +2,7 @@
 using LPChat.Domain.Entities;
 using LPChat.Domain.Results;
 using LPChat.Infrastructure.Interfaces;
-using LPChat.Infrastructure.ViewModels;
+using LPChat.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +33,7 @@ namespace LPChat.Infrastructure.Services
             Guard.NotNull(message.ChatId, nameof(message.ChatId));
             Guard.NotNull(message.PersonId, nameof(message.PersonId));
 
-            //TODO. Remove this sh*t and use Automapper
+            // TODO. Remove this sh*t and use Automapper
             var messageModel = new Message
             {
                 Text = message.Text,
@@ -49,7 +49,7 @@ namespace LPChat.Infrastructure.Services
             //retrieve person information for ViewModel
             var personInfo = await _personInfoService.GetOneAsync(message.PersonId.Value);
 
-            //TODO. Remove this sh*t and use Automapper [2]
+            // TODO. Remove this sh*t and use Automapper [2]
             message.ID = messageModel.ID;
             message.CreatedUtcDate = messageModel.CreatedUtcDate;
             message.PersonName = _personInfoService.GetPersonDisplayName(personInfo);

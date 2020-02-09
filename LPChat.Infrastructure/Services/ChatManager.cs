@@ -1,14 +1,13 @@
-﻿using LPChat.Infrastructure.ViewModels;
-using LPChat.Domain.Entities;
+﻿using LPChat.Domain.Results;
 using LPChat.Infrastructure.Interfaces;
-using LPChat.Domain.Results;
+using LPChat.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LPChat.Infrastructure.Services
 {
-	public class ChatManager
+    public class ChatManager
     {
         private readonly IChatService _chatService;
         private readonly IMessageService _messageService;
@@ -42,10 +41,10 @@ namespace LPChat.Infrastructure.Services
             _chatService.GetChatInfo(chatId);
         }
 
-        public async Task<OperationResult> UpdatePersonList(ChatStateViewModel newChatState)
-        {
-            return await _chatService.UpdatePersonList(newChatState);
-        }
+        //public async Task<OperationResult> UpdatePersonList(ChatStateViewModel newChatState)
+        //{
+        //    return await _chatService.UpdatePersonList(newChatState);
+        //}
         #endregion
     }
 }

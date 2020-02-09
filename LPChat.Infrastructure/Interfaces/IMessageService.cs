@@ -1,12 +1,11 @@
-﻿using LPChat.Domain.Entities;
-using LPChat.Domain.Results;
-using LPChat.Infrastructure.ViewModels;
+﻿using LPChat.Domain.Results;
+using LPChat.Infrastructure.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LPChat.Infrastructure.Interfaces
 {
-	public interface IMessageService
+    public interface IMessageService
     {
         List<MessageModel> Messages { get; }
 

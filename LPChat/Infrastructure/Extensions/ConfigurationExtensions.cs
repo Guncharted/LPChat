@@ -14,7 +14,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace LPChat.Helpers
+namespace LPChat.Infrastructure
 {
 	public static class ConfigurationExtensions
 	{

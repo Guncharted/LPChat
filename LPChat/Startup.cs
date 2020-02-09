@@ -1,4 +1,4 @@
-﻿using LPChat.Helpers;
+﻿using LPChat.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

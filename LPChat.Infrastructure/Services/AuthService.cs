@@ -26,7 +26,7 @@ namespace LPChat.Infrastructure.Services
             _repoManager = repoManager;
         }
 
-        public async Task<OperationResult> RegisterAsync(PersonRegisterViewModel userForRegister)
+        public async Task<OperationResult> RegisterAsync(UserSecurityModel userForRegister)
         {
             Guard.NotNull(userForRegister, nameof(userForRegister));
 
@@ -53,12 +53,12 @@ namespace LPChat.Infrastructure.Services
             return new OperationResult(true, "Registration succesful", payload: person.ID);
         }
 
-        public async Task<OperationResult> LoginAsync(PersonLoginViewModel userForLoginDto)
+        public async Task<OperationResult> LoginAsync(UserSecurityModel userForLoginDto)
         {
             Guard.NotNull(userForLoginDto, nameof(userForLoginDto));
 
             var repository = _repoManager.GetRepository<User>();
-            var persons = await repository.GetAsync(u => u.Username.ToUpper() == userForLoginDto.UserName.ToUpper());
+            var persons = await repository.GetAsync(u => string.Equals(u.Username, userForLoginDto.Username, StringComparison.OrdinalIgnoreCase));
             var person = persons.FirstOrDefault();
 
             if (person == null)
@@ -73,7 +73,9 @@ namespace LPChat.Infrastructure.Services
             return result;
         }
 
+        // TODO. remove overloads after policies will be introduced
         public async Task<OperationResult> ChangePasswordAsync(UserSecurityModel userDataNew) => await ChangePasswordAsync(userDataNew, null);
+
         public async Task<OperationResult> ChangePasswordAsync(UserSecurityModel userDataNew, Guid? requestorId = null)
         {
             var validateRequestor = requestorId != null;

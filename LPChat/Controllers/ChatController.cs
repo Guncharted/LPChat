@@ -1,39 +1,43 @@
-﻿using LPChat.Infrastructure.ViewModels;
-using LPChat.Domain.Entities;
+﻿using AutoMapper;
+using LPChat.Infrastructure;
 using LPChat.Infrastructure.Interfaces;
+using LPChat.Infrastructure.Models;
+using LPChat.Infrastructure.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using System;
-using System.Security.Claims;
-using LPChat.Helpers;
+using System.Threading.Tasks;
 
 namespace LPChat.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ChatController : ControllerBase
     {
         private readonly IMessageService _messageService;
-		private readonly IChatService _chatservice;
+        private readonly IChatService _chatservice;
+        private readonly IMapper _mapper;
 
-        public ChatController(IMessageService messageService, IChatService chatService)
+        public ChatController(IMessageService messageService, IChatService chatService, IMapper mapper)
         {
             _messageService = messageService;
-			_chatservice = chatService;
+            _chatservice = chatService;
+            _mapper = mapper;
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> AddMessage(MessageViewModel message)
+        public async Task<IActionResult> AddMessage(MessageViewModel messageViewModel)
         {
-            message.PersonId = User.GetPersonId();
+            var message = _mapper.Map<MessageModel>(messageViewModel);
+            messageViewModel.PersonId = User.GetPersonId();
             await _messageService.AddMessage(message);
             return Ok();
         }
 
         [HttpGet("poll")]
-        public IActionResult Poll(MessageViewModel lastMessage)
+        public IActionResult Poll(MessageViewModel messageViewModel)
         {
-            var result = _messageService.GetMessages(lastMessage);
+            var message = _mapper.Map<MessageModel>(messageViewModel);
+            var result = _messageService.GetMessages(message);
 
             return Ok(result);
         }
@@ -41,15 +45,17 @@ namespace LPChat.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateNewChat(ChatCreateViewModel chatForCreate)
         {
-			var result = await _chatservice.Create(chatForCreate);
+            var chat = _mapper.Map<ChatModel>(chatForCreate);
+            var result = await _chatservice.Create(chat);
 
-			return Ok(result);
-		}
+            return Ok(result);
+        }
 
         [HttpPost("updatePersons")]
         public async Task<IActionResult> UpdatePersons(ChatStateViewModel chatState)
         {
-            var result = await _chatservice.UpdatePersonList(chatState);
+            var chat = _mapper.Map<ChatModel>(chatState);
+            var result = await _chatservice.Update(chat);
 
             return Ok(result);
         }
