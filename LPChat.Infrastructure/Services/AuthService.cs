@@ -13,6 +13,7 @@ using LPChat.Common.Exceptions;
 using LPChat.Data.MongoDb.Entities;
 using LPChat.Common.DbContracts;
 using LPChat.Common.Models;
+using LPChat.Infrastructure.Mapping;
 
 namespace LPChat.Infrastructure.Services
 {
@@ -36,14 +37,9 @@ namespace LPChat.Infrastructure.Services
                 throw new DuplicateException("User already exists!");
             }
 
-            var user = new User
-            {
-                Username = userForRegister.Username,
-                FirstName = userForRegister.FirstName,
-                LastName = userForRegister.LastName
-            };
 
             CreatePasswordHash(userForRegister.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            var user = DataMapper.Map<UserSecurityModel, User>(userForRegister);
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;

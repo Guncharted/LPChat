@@ -4,6 +4,7 @@ using LPChat.Data.MongoDb.Entities;
 using LPChat.Domain;
 using LPChat.Domain.Results;
 using LPChat.Infrastructure.Interfaces;
+using LPChat.Infrastructure.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,42 +29,34 @@ namespace LPChat.Infrastructure.Services
             _personInfoService = personInfoService;
         }
 
-        public async Task<OperationResult> AddMessage(MessageModel message)
+        public async Task<OperationResult> AddMessage(MessageModel messageToAdd)
         {
-            Guard.NotNull(message, nameof(message));
-            Guard.NotNull(message.ChatId, nameof(message.ChatId));
-            Guard.NotNull(message.PersonId, nameof(message.PersonId));
+            Guard.NotNull(messageToAdd, nameof(messageToAdd));
+            Guard.NotNull(messageToAdd.ChatId, nameof(messageToAdd.ChatId));
+            Guard.NotNull(messageToAdd.PersonId, nameof(messageToAdd.PersonId));
 
-            // TODO. Remove this sh*t and use Automapper
-            var messageModel = new Message
-            {
-                Text = message.Text,
-                ChatId = message.ChatId.Value,
-                PersonId = message.PersonId.Value
-            };
-
+            var message = DataMapper.Map<MessageModel, Message>(messageToAdd);
             var repo = _repositoryManager.GetRepository<Message>();
 
             //adding message to Db
-            await repo.CreateAsync(messageModel);
+            await repo.CreateAsync(message);
 
             //retrieve person information for ViewModel
-            var personInfo = await _personInfoService.GetOneAsync(message.PersonId.Value);
+            var personInfo = await _personInfoService.GetOneAsync(messageToAdd.PersonId.Value);
 
-            // TODO. Remove this sh*t and use Automapper [2]
-            message.ID = messageModel.ID;
-            message.CreatedUtcDate = messageModel.CreatedUtcDate;
-            message.PersonName = _personInfoService.GetPersonDisplayName(personInfo);
+            messageToAdd.ID = message.ID;
+            messageToAdd.CreatedUtcDate = message.CreatedUtcDate;
+            messageToAdd.PersonName = _personInfoService.GetPersonDisplayName(personInfo);
 
             lock (threadLock)
             {
-                Messages.Add(message);
+                Messages.Add(messageToAdd);
             }
 
             //create result
-            var result = message.ID != null && message.ID != Guid.Empty;
+            var result = messageToAdd.ID != null && messageToAdd.ID != Guid.Empty;
             if (result)
-                return new OperationResult(result, "Created", message);
+                return new OperationResult(result, "Created", messageToAdd);
             else
                 return new OperationResult(result, "Failed to create");
         }
