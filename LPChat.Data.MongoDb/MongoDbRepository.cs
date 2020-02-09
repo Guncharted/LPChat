@@ -1,7 +1,6 @@
-﻿using LPChat.Domain;
-using LPChat.Domain.Exceptions;
-using LPChat.Domain.Interfaces;
-using LPChat.Infrastructure.Interfaces;
+﻿using LPChat.Common.DbContracts;
+using LPChat.Common.Exceptions;
+using LPChat.Domain;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -13,7 +12,7 @@ using System.Threading.Tasks;
 namespace LPChat.MongoDb
 {
     public class MongoDbRepository<T> : IRepository<T>
-        where T : class, IEntity
+        where T : class, IMongoEntity
     {
         public IMongoCollection<T> Collection { get; }
 

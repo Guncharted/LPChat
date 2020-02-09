@@ -22,8 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LPChat.Data.MongoDb\LPChat.Data.MongoDb.csproj" />
     <ProjectReference Include="..\LPChat.Infrastructure\LPChat.Infrastructure.csproj" />
-    <ProjectReference Include="..\LPChat.MongoDb\LPChat.MongoDb.csproj" />
+    <ProjectReference Include="..\LPChat.MongoDb\LPChat.Data.MongoDb.csproj" />
   </ItemGroup>
 
 </Project>

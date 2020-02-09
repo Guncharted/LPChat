@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace LPChat.Domain.Exceptions
+namespace LPChat.Common.Exceptions
 {
 	[Serializable]
 	public class PasswordMismatchException : Exception

@@ -1,21 +1,22 @@
 ﻿using LPChat.Infrastructure.ViewModels;
-using LPChat.Domain.Entities;
-using LPChat.Domain.Exceptions;
 using LPChat.Infrastructure.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using LPChat.Common.DbContracts;
+using LPChat.Data.MongoDb.Entities;
+using LPChat.Common.Exceptions;
 
 namespace LPChat.Infrastructure.Services
 {
-    public class PersonInfoService : IPersonInfoService
+    public class UserService : IUserService
     {
         private readonly IRepositoryManager _repoManager;
         private readonly IMemoryCache _memoryCache;
 
-        public PersonInfoService(IRepositoryManager repoManager, IMemoryCache memoryCache)
+        public UserService(IRepositoryManager repoManager, IMemoryCache memoryCache)
         {
             _repoManager = repoManager;
             _memoryCache = memoryCache;

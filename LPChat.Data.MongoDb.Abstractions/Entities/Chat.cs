@@ -1,11 +1,11 @@
-﻿using LPChat.Domain.Interfaces;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
+using LPChat.Common.DbContracts;
 
-namespace LPChat.Domain.Entities
+namespace LPChat.Data.MongoDb.Entities
 {
-	public class Chat : IEntity
+    public class Chat : IMongoEntity
     {
         [BsonId]
         public Guid ID { get; set; }

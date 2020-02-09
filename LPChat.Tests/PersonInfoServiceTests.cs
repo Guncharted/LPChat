@@ -1,4 +1,5 @@
-using LPChat.Domain.Entities;
+using LPChat.Common.DbContracts;
+using LPChat.Data.MongoDb.Entities;
 using LPChat.Infrastructure.Interfaces;
 using LPChat.Infrastructure.Services;
 using Moq;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Tests
 {
-	public class PersonInfoServiceTests
+    public class PersonInfoServiceTests
 	{
 		private readonly Mock<IRepositoryManager> repoManager;
 		private readonly Mock<IRepository<User>> personRepository;
@@ -51,7 +52,7 @@ namespace Tests
 		[Test]
 		public void GetOneUserById()
 		{
-			var personService = new PersonInfoService(repoManager.Object, null);
+			var personService = new UserService(repoManager.Object, null);
 			var person = personService.GetOneAsync(singleUserTestId).Result;
 			Assert.AreEqual("hanchar.aleh@gmail.com", person.Username);
 			Assert.AreEqual("Oleg", person.FirstName);

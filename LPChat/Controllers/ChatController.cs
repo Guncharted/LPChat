@@ -4,7 +4,6 @@ using LPChat.Infrastructure.Interfaces;
 using LPChat.Infrastructure.Models;
 using LPChat.Infrastructure.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace LPChat.Controllers

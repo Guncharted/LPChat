@@ -1,5 +1,6 @@
-﻿using LPChat.Domain.Entities;
-using LPChat.Domain.Exceptions;
+﻿using LPChat.Common.DbContracts;
+using LPChat.Common.Exceptions;
+using LPChat.Data.MongoDb.Entities;
 using LPChat.Domain.Results;
 using LPChat.Infrastructure.Interfaces;
 using LPChat.Infrastructure.Models;
@@ -13,10 +14,10 @@ namespace LPChat.Infrastructure.Services
 {
     public class ChatService : IChatService
     {
-        private readonly IPersonInfoService _personInfoService;
+        private readonly IUserService _personInfoService;
         private readonly IRepositoryManager _repoManager;
 
-        public ChatService(IRepositoryManager repoManager, IPersonInfoService personInfoService)
+        public ChatService(IRepositoryManager repoManager, IUserService personInfoService)
         {
             _personInfoService = personInfoService;
             _repoManager = repoManager;

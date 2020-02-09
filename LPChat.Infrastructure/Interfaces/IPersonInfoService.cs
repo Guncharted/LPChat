@@ -5,7 +5,7 @@ using LPChat.Infrastructure.ViewModels;
 
 namespace LPChat.Infrastructure.Interfaces
 {
-	public interface IPersonInfoService
+	public interface IUserService
 	{
 		Task<IEnumerable<UserModel>> GetManyAsync(IEnumerable<Guid> IDs);
 		Task<UserModel> GetOneAsync(Guid personId);

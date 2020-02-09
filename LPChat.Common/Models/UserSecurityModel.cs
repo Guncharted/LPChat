@@ -1,9 +1,8 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace LPChat.Infrastructure.ViewModels
 {
-	public class UserSecurityModel
+    public class UserSecurityModel
     {
         public Guid ID { get; set; }
 

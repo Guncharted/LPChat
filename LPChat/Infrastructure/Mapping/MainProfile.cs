@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using LPChat.Infrastructure.Models;
 using LPChat.Infrastructure.ViewModels;
-using System;
-using System.Linq;
 
 namespace LPChat.Infrastructure.Mapping
 {

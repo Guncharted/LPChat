@@ -1,5 +1,6 @@
-﻿using LPChat.Domain;
-using LPChat.Domain.Entities;
+﻿using LPChat.Common.DbContracts;
+using LPChat.Data.MongoDb.Entities;
+using LPChat.Domain;
 using LPChat.Domain.Results;
 using LPChat.Infrastructure.Interfaces;
 using LPChat.Infrastructure.Models;
@@ -18,10 +19,10 @@ namespace LPChat.Infrastructure.Services
         public List<MessageModel> Messages => _messages = _messages ?? new List<MessageModel>();
 
         private readonly IRepositoryManager _repositoryManager;
-        private readonly IPersonInfoService _personInfoService;
+        private readonly IUserService _personInfoService;
         private readonly object threadLock = new object();
 
-        public MessageService(IRepositoryManager repositoryManager, IPersonInfoService personInfoService)
+        public MessageService(IRepositoryManager repositoryManager, IUserService personInfoService)
         {
             _repositoryManager = repositoryManager;
             _personInfoService = personInfoService;

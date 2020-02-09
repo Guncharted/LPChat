@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LPChat.Common.DbContracts;
 using LPChat.Infrastructure.Interfaces;
 using LPChat.Infrastructure.Mapping;
 using LPChat.Infrastructure.Services;
@@ -25,7 +26,7 @@ namespace LPChat.Infrastructure
             services.AddSingleton<IMessageService, MessageService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IChatService, ChatService>();
-            services.AddScoped<IPersonInfoService, PersonInfoService>();
+            services.AddScoped<IUserService, UserService>();
 
             var mapperConfig = new MapperConfiguration(cfg =>
             {
@@ -34,7 +35,7 @@ namespace LPChat.Infrastructure
             });
 
             services
-                .AddSingleton<IRepositoryManager, MongoReposiotoryManager>(x => new MongoReposiotoryManager("cchat", configuration.GetConnectionString("MongoLocal")));
+                .AddSingleton<IRepositoryManager, MongoRepositoryManager>(x => new MongoRepositoryManager("cchat", configuration.GetConnectionString("MongoLocal")));
 
             services.AddCors();
             services.AddMemoryCache();

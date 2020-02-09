@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -14,7 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LPChat.Core\LPChat.Core.csproj" />
+    <ProjectReference Include="..\LPChat.Common\LPChat.Common.csproj" />
+    <ProjectReference Include="..\LPChat.Core\LPChat.Common.csproj" />
     <ProjectReference Include="..\LPChat.Infrastructure\LPChat.Infrastructure.csproj" />
   </ItemGroup>
 

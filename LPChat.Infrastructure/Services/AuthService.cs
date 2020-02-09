@@ -1,7 +1,5 @@
 ﻿using LPChat.Domain;
 using LPChat.Infrastructure.ViewModels;
-using LPChat.Domain.Entities;
-using LPChat.Domain.Exceptions;
 using LPChat.Infrastructure.Interfaces;
 using LPChat.Domain.Results;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +10,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using LPChat.Common.Exceptions;
+using LPChat.Data.MongoDb.Entities;
+using LPChat.Common.DbContracts;
 
 namespace LPChat.Infrastructure.Services
 {
@@ -35,7 +36,7 @@ namespace LPChat.Infrastructure.Services
                 throw new DuplicateException("User already exists!");
             }
 
-            var person = new User
+            var user = new User
             {
                 Username = userForRegister.Username,
                 FirstName = userForRegister.FirstName,
@@ -44,13 +45,13 @@ namespace LPChat.Infrastructure.Services
 
             CreatePasswordHash(userForRegister.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            person.PasswordHash = passwordHash;
-            person.PasswordSalt = passwordSalt;
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
 
             var repository = _repoManager.GetRepository<User>();
-            await repository.CreateAsync(person);
+            await repository.CreateAsync(user);
 
-            return new OperationResult(true, "Registration succesful", payload: person.ID);
+            return new OperationResult(true, "Registration successful", payload: user.ID);
         }
 
         public async Task<OperationResult> LoginAsync(UserSecurityModel userForLoginDto)
