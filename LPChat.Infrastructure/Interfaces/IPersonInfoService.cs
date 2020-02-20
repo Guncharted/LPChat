@@ -9,6 +9,5 @@ namespace LPChat.Infrastructure.Interfaces
 	{
 		Task<IEnumerable<UserModel>> GetManyAsync(IEnumerable<Guid> IDs);
 		Task<UserModel> GetOneAsync(Guid personId);
-		string GetPersonDisplayName(UserModel personInfo);
 	}
 }

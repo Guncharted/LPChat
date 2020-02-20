@@ -101,8 +101,7 @@ namespace LPChat.Infrastructure.Services
 
             await repository.UpdateAsync(user);
 
-            var result = new OperationResult(true, "Password has been changed.");
-            return result;
+            return new OperationResult(true, "Password has been changed.");
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
@@ -158,10 +157,7 @@ namespace LPChat.Infrastructure.Services
             var repository = _repoManager.GetRepository<User>();
             var persons = (await repository.GetAsync(u => string.Compare(u.Username, username, StringComparison.CurrentCultureIgnoreCase) == 0)).ToList();
 
-            if (persons.Count > 0)
-                return true;
-
-            return false;
+            return persons.Count > 0;
         }
 
         private ClaimsIdentity GetClaimsIdentity(User person)

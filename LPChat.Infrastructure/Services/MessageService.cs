@@ -1,5 +1,6 @@
 ﻿using LPChat.Common.DbContracts;
 using LPChat.Common.Models;
+using LPChat.Common.Models.Extensions;
 using LPChat.Data.MongoDb.Entities;
 using LPChat.Domain;
 using LPChat.Domain.Results;
@@ -42,11 +43,11 @@ namespace LPChat.Infrastructure.Services
             await repo.CreateAsync(message);
 
             //retrieve person information for ViewModel
-            var personInfo = await _personInfoService.GetOneAsync(messageToAdd.PersonId.Value);
+            var user = await _personInfoService.GetOneAsync(messageToAdd.PersonId.Value);
 
             messageToAdd.ID = message.ID;
             messageToAdd.CreatedUtcDate = message.CreatedUtcDate;
-            messageToAdd.PersonName = _personInfoService.GetPersonDisplayName(personInfo);
+            messageToAdd.PersonName = user.GetDisplayName();
 
             lock (threadLock)
             {

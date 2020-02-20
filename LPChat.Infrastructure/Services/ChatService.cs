@@ -1,6 +1,7 @@
 ﻿using LPChat.Common.DbContracts;
 using LPChat.Common.Exceptions;
 using LPChat.Common.Models;
+using LPChat.Common.Models.Extensions;
 using LPChat.Data.MongoDb.Entities;
 using LPChat.Domain.Results;
 using LPChat.Infrastructure.Interfaces;
@@ -97,7 +98,6 @@ namespace LPChat.Infrastructure.Services
             if (chats.Count == 0)
                 return new List<ChatModel>();
 
-
             if (chats.Any(c => !c.IsPublic))
             {
                 //getting ids of companions
@@ -109,13 +109,13 @@ namespace LPChat.Infrastructure.Services
                 var companionsInfo = await _personInfoService.GetManyAsync(companionIds);
 
                 //setting names of private chats equal to companion's name
-                chats.ForEach(c =>
+                chats.ForEach(chat =>
                 {
-                    if (!c.IsPublic)
+                    if (!chat.IsPublic)
                     {
-                        var compId = c.PersonIds.First(i => i != personId);
-                        var comp = companionsInfo.First(p => p.ID == compId);
-                        c.Name = _personInfoService.GetPersonDisplayName(comp);
+                        var companionId = chat.PersonIds.First(i => i != personId);
+                        var companion = companionsInfo.First(p => p.ID == companionId);
+                        chat.Name = companion.GetDisplayName();
                     }
                 });
             }

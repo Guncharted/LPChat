@@ -8,6 +8,7 @@ using LPChat.Common.DbContracts;
 using LPChat.Data.MongoDb.Entities;
 using LPChat.Common.Exceptions;
 using LPChat.Common.Models;
+using LPChat.Infrastructure.Mapping;
 
 namespace LPChat.Infrastructure.Services
 {
@@ -22,65 +23,39 @@ namespace LPChat.Infrastructure.Services
             _memoryCache = memoryCache;
         }
 
-        public async Task<UserModel> GetOneAsync(Guid personId)
+        public async Task<UserModel> GetOneAsync(Guid userId)
         {
-            if (TryFromCache(personId, out UserModel cachedPerson))
+            if (TryGetFromCache(userId, out UserModel cachedUser))
             {
-                return cachedPerson;
+                return cachedUser;
             }
 
             var repository = _repoManager.GetRepository<User>();
-            var person = await repository.FindById(personId);
+            var user = await repository.FindById(userId);
 
-            if (person == null)
-            {
-                throw new PersonNotFoundException($"Person with id {personId} does not exist!");
-            }
+            _ = user ?? throw new PersonNotFoundException($"Person with id {userId} does not exist!");
 
-            var personInfo = MapToPersonInfo(person);
-            AddPersonToCache(personInfo);
+            var userModel = DataMapper.Map<User, UserModel>(user);
+            AddPersonToCache(userModel);
 
-            return personInfo;
+            return userModel;
         }
 
         public async Task<IEnumerable<UserModel>> GetManyAsync(IEnumerable<Guid> IDs)
         {
             var repository = _repoManager.GetRepository<User>();
-            var persons = await repository.GetAsync(p => IDs.Contains(p.ID));
-            var personsInfo = persons.Select(p => MapToPersonInfo(p));
-
-            return personsInfo;
+            var users = await repository.GetAsync(p => IDs.Contains(p.ID));
+            return DataMapper.Map<IEnumerable<User>, IEnumerable<UserModel>>(users);
         }
 
-        public string GetPersonDisplayName(UserModel personInfo)
-        {
-            if (string.IsNullOrWhiteSpace(personInfo.FirstName) || string.IsNullOrWhiteSpace(personInfo.LastName))
-            {
-                return personInfo.Username;
-            }
 
-            return string.Format($"{personInfo.FirstName} {personInfo.LastName}");
-        }
-
-        private UserModel MapToPersonInfo(User person)
-        {
-            var personInfo = new UserModel
-            {
-                ID = person.ID,
-                Username = person.Username,
-                FirstName = person.FirstName,
-                LastName = person.LastName
-            };
-
-            return personInfo;
-        }
-
+        //TODO below methods should be moved to separate service
         private void AddPersonToCache(UserModel person)
         {
             _memoryCache.Set<UserModel>(person.ID, person, TimeSpan.FromMinutes(30));
         }
 
-        private bool TryFromCache(Guid personId, out UserModel cachedPerson)
+        private bool TryGetFromCache(Guid personId, out UserModel cachedPerson)
         {
             if (_memoryCache.TryGetValue(personId, out cachedPerson))
             {
