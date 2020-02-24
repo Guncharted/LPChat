@@ -341,3 +341,4 @@ healthchecksdb
 
 # Sonar
 sonar-run.ps1
+.sonarqube

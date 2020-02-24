@@ -43,7 +43,7 @@ namespace LPChat.Infrastructure.Services
             await repo.CreateAsync(message);
 
             //retrieve person information for ViewModel
-            var user = await _personInfoService.GetOneAsync(messageToAdd.PersonId.Value);
+            var user = await _personInfoService.GetById(messageToAdd.PersonId.Value);
 
             messageToAdd.ID = message.ID;
             messageToAdd.CreatedUtcDate = message.CreatedUtcDate;

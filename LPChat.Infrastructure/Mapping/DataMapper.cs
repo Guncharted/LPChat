@@ -6,16 +6,11 @@ namespace LPChat.Infrastructure.Mapping
 {
     public static class DataMapper
     {
-        private static readonly IMapper mapper;
-
-        static DataMapper()
-        {
-            var mapperConfig = new MapperConfiguration(cfg =>
+        private static IMapper mapper = new MapperConfiguration(cfg =>
             {
                 cfg.AllowNullCollections = true;
                 cfg.AddProfile<DataProfile>();
-            });
-        }
+            }).CreateMapper();
 
         public static D Map<S, D>(S source)
         {

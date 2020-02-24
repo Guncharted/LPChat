@@ -23,7 +23,7 @@ namespace LPChat.Infrastructure.Services
             _memoryCache = memoryCache;
         }
 
-        public async Task<UserModel> GetOneAsync(Guid userId)
+        public async Task<UserModel> GetById(Guid userId)
         {
             if (TryGetFromCache(userId, out UserModel cachedUser))
             {
@@ -41,10 +41,10 @@ namespace LPChat.Infrastructure.Services
             return userModel;
         }
 
-        public async Task<IEnumerable<UserModel>> GetManyAsync(IEnumerable<Guid> IDs)
+        public async Task<IEnumerable<UserModel>> Get(IEnumerable<Guid> Ids)
         {
             var repository = _repoManager.GetRepository<User>();
-            var users = await repository.GetAsync(p => IDs.Contains(p.ID));
+            var users = await repository.GetAsync(p => Ids.Contains(p.ID));
             return DataMapper.Map<IEnumerable<User>, IEnumerable<UserModel>>(users);
         }
 

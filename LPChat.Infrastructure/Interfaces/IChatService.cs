@@ -9,6 +9,6 @@ namespace LPChat.Infrastructure.Interfaces
     {
         Task<OperationResult> Create(ChatModel chatForCreate);
         void GetChatInfo(Guid chatId);
-        Task<OperationResult> Update(ChatModel newChatState);
+        Task<OperationResult> Update(ChatModel patch);
     }
 }

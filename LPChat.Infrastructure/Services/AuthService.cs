@@ -50,18 +50,18 @@ namespace LPChat.Infrastructure.Services
             return new OperationResult(true, "Registration successful", payload: user.ID);
         }
 
-        public async Task<OperationResult> LoginAsync(UserSecurityModel userForLoginDto)
+        public async Task<OperationResult> LoginAsync(UserSecurityModel userForLogin)
         {
-            Guard.NotNull(userForLoginDto, nameof(userForLoginDto));
+            Guard.NotNull(userForLogin, nameof(userForLogin));
 
             var repository = _repoManager.GetRepository<User>();
-            var persons = await repository.GetAsync(u => string.Equals(u.Username, userForLoginDto.Username, StringComparison.OrdinalIgnoreCase));
+            var persons = await repository.GetAsync(u => string.Equals(u.Username, userForLogin.Username, StringComparison.OrdinalIgnoreCase));
             var person = persons.FirstOrDefault();
 
             if (person == null)
                 throw new PersonNotFoundException("User not found.");
 
-            if (!VerifyPasswordHash(userForLoginDto.Password, person.PasswordHash, person.PasswordSalt))
+            if (!VerifyPasswordHash(userForLogin.Password, person.PasswordHash, person.PasswordSalt))
                 throw new PasswordMismatchException("Wrong password!");
 
             var token = GenerateToken(person);
@@ -71,31 +71,31 @@ namespace LPChat.Infrastructure.Services
         }
 
         // TODO. remove overloads after policies will be introduced
-        public async Task<OperationResult> ChangePasswordAsync(UserSecurityModel userDataNew) => await ChangePasswordAsync(userDataNew, null);
+        public async Task<OperationResult> ChangePasswordAsync(UserSecurityModel userToChange) => await ChangePasswordAsync(userToChange, null);
 
-        public async Task<OperationResult> ChangePasswordAsync(UserSecurityModel userDataNew, Guid? requestorId = null)
+        public async Task<OperationResult> ChangePasswordAsync(UserSecurityModel userToChange, Guid? requestorId)
         {
             var validateRequestor = requestorId != null;
-            return await ChangePasswordAsync(userDataNew, validateRequestor, requestorId);
+            return await ChangePasswordAsync(userToChange, validateRequestor, requestorId);
         }
 
-        private async Task<OperationResult> ChangePasswordAsync(UserSecurityModel userDataNew, bool validateRequestor, Guid? requestorId)
+        private async Task<OperationResult> ChangePasswordAsync(UserSecurityModel userToChange, bool validateRequestor, Guid? requestorId)
         {
-            if (userDataNew.Password != userDataNew.ConfirmPassword)
+            if (userToChange.Password != userToChange.ConfirmPassword)
                 throw new PasswordMismatchException("New password is not matching confirmation value");
 
             var repository = _repoManager.GetRepository<User>();
-            var user = (await repository.GetAsync(u => u.ID == userDataNew.ID)).FirstOrDefault();
+            var user = (await repository.GetAsync(u => u.ID == userToChange.ID)).FirstOrDefault();
 
             Guard.NotNull(user, nameof(user));
 
             if (validateRequestor && requestorId != user.ID)
                 throw new ChatAppException("Unauthorized attempt to change password");
 
-            if (!VerifyPasswordHash(userDataNew.OldPassword, user.PasswordHash, user.PasswordSalt))
+            if (!VerifyPasswordHash(userToChange.OldPassword, user.PasswordHash, user.PasswordSalt))
                 throw new PasswordMismatchException("Wrong old password!");
 
-            CreatePasswordHash(userDataNew.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            CreatePasswordHash(userToChange.Password, out byte[] passwordHash, out byte[] passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 

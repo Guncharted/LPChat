@@ -50,8 +50,6 @@ namespace LPChat.Infrastructure.Services
             chat.PersonIds = chatForCreate.PersonIds;
             chat.LastUpdatedUtcDate = DateTime.UtcNow;
 
-            //await _chatContext.Insert(chat);
-
             var repository = _repoManager.GetRepository<Chat>();
             await repository.CreateAsync(chat);
 
@@ -106,7 +104,7 @@ namespace LPChat.Infrastructure.Services
                     .Select(p => p.PersonIds.First(id => id != personId));
 
                 //retrieving companions profiles
-                var companionsInfo = await _personInfoService.GetManyAsync(companionIds);
+                var companionsInfo = await _personInfoService.Get(companionIds);
 
                 //setting names of private chats equal to companion's name
                 chats.ForEach(chat =>
@@ -136,7 +134,7 @@ namespace LPChat.Infrastructure.Services
             var result = await repository
                 .GetAsync(c => !c.IsPublic && userIds.All(uid => c.PersonIds.Contains(uid)));
 
-            return result.Count() > 0 ? true : false;
+            return result?.Count() > 0;
         }
     }
 }

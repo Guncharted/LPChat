@@ -9,7 +9,7 @@ namespace LPChat.Infrastructure.Interfaces
     {
         List<MessageModel> Messages { get; }
 
-        Task<OperationResult> AddMessage(MessageModel message);
+        Task<OperationResult> AddMessage(MessageModel messageToAdd);
         List<MessageModel> GetMessages(MessageModel lastMessage);
     }
 }
