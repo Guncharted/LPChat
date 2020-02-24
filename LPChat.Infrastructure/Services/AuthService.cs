@@ -166,6 +166,8 @@ namespace LPChat.Infrastructure.Services
             var claims = new[]
             {
                     new Claim(ClaimTypes.NameIdentifier, person.ID.ToString()),
+
+                    //below to be removed
                     new Claim(ClaimTypes.Name, person.Username),
                     new Claim(ClaimTypes.GivenName, person.FirstName ?? string.Empty),
                     new Claim(ClaimTypes.Surname, person.LastName ?? string.Empty)
