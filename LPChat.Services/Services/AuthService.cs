@@ -1,7 +1,5 @@
 ﻿using LPChat.Domain;
-using LPChat.Infrastructure.Interfaces;
 using LPChat.Domain.Results;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -13,9 +11,11 @@ using LPChat.Common.Exceptions;
 using LPChat.Data.MongoDb.Entities;
 using LPChat.Common.DbContracts;
 using LPChat.Common.Models;
-using LPChat.Infrastructure.Mapping;
+using LPChat.Services.Mapping;
+using LPChat.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
 
-namespace LPChat.Infrastructure.Services
+namespace LPChat.Services.Services
 {
     public class AuthService : IAuthService
     {
@@ -32,15 +32,15 @@ namespace LPChat.Infrastructure.Services
         {
             Guard.NotNull(userForRegister, nameof(userForRegister));
 
-            if (await PersonExists(userForRegister.Username.ToLower()))
+            if (await PersonExists(userForRegister.Username))
             {
                 throw new DuplicateException("User already exists!");
             }
 
-
             CreatePasswordHash(userForRegister.Password, out byte[] passwordHash, out byte[] passwordSalt);
             var user = DataMapper.Map<UserSecurityModel, User>(userForRegister);
 
+            user.Username = userForRegister.Username;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
@@ -155,27 +155,17 @@ namespace LPChat.Infrastructure.Services
         private async Task<bool> PersonExists(string username)
         {
             var repository = _repoManager.GetRepository<User>();
-            var persons = (await repository.GetAsync(u => string.Compare(u.Username, username, StringComparison.CurrentCultureIgnoreCase) == 0)).ToList();
+            var persons = (await repository.GetAsync(u => u.Username.Equals(username)))?.ToList();
 
-            return persons.Count > 0;
+            return persons?.Count > 0;
         }
 
         private ClaimsIdentity GetClaimsIdentity(User person)
         {
             //array of claims (to PAYLOAD:DATA)
-            var claims = new[]
-            {
-                    new Claim(ClaimTypes.NameIdentifier, person.ID.ToString()),
+            var claims = new[] { new Claim(ClaimTypes.NameIdentifier, person.ID.ToString()) };
 
-                    //below to be removed
-                    new Claim(ClaimTypes.Name, person.Username),
-                    new Claim(ClaimTypes.GivenName, person.FirstName ?? string.Empty),
-                    new Claim(ClaimTypes.Surname, person.LastName ?? string.Empty)
-            };
-
-            var claimsIdentity = new ClaimsIdentity(claims);
-
-            return claimsIdentity;
+            return new ClaimsIdentity(claims);
         }
 
     }

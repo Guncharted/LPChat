@@ -5,12 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.10.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.10.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LPChat.Common\LPChat.Common.csproj" />
-    <ProjectReference Include="..\LPChat.Infrastructure\LPChat.Infrastructure.csproj" />
+    <ProjectReference Include="..\LPChat.Services\LPChat.Services.csproj" />
   </ItemGroup>
 
 </Project>

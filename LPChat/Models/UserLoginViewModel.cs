@@ -1,6 +1,6 @@
-﻿namespace LPChat.Infrastructure.ViewModels
+﻿namespace LPChat.Services.ViewModels
 {
-    public class PersonLoginViewModel
+    public class UserLoginViewModel
     {
         public string UserName { get; set; }
         public string Password { get; set; }

@@ -13,6 +13,7 @@ namespace LPChat.MongoDb
             _connectionString = connectionString;
         }
 
-        public IRepository<T> GetRepository<T>() where T : class, IMongoEntity => new MongoDbRepository<T>(_dbName, typeof(T).Name.ToLower(), _connectionString);
+        public IRepository<T> GetRepository<T>() where T : class, IMongoEntity => 
+            new MongoDbRepository<T>(_dbName, typeof(T).Name.ToLower(), _connectionString);
     }
 }

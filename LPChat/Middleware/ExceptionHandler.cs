@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using LPChat.Common.Exceptions;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -30,16 +32,30 @@ namespace LPChat.Middleware
 		// TODO. Re-implement!!!
 		public async Task HandleException(HttpContext context, Exception exception)
 		{
-			context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-			var error = context.Features.Get<IExceptionHandlerFeature>();
+			context.Response.ContentType = "application/json";
 
-			if (error != null)
+			context.Response.StatusCode = exception switch
 			{
-				context.Response.Headers.Add("Application-Error", error.Error.Message);
-				context.Response.Headers.Add("Access-Control-Expose-Headers", "Application-Error");
+				PasswordMismatchException _ => StatusCodes.Status400BadRequest,
+				PersonNotFoundException _ => StatusCodes.Status404NotFound,
+				DuplicateException _ => StatusCodes.Status409Conflict,
+				_ => StatusCodes.Status500InternalServerError
 
-				await context.Response.WriteAsync(error.Error.Message);
-			}
+			};
+
+			context.Response.Headers.Add("Application-Error", exception.Message);
+			context.Response.Headers.Add("Access-Control-Expose-Headers", "Application-Error");
+
+			var json = JsonConvert.SerializeObject(new
+			{
+				error = new
+				{
+					message = exception.Message,
+					stackTrace = exception.StackTrace
+				}
+			});
+
+			await context.Response.WriteAsync(json);
 		}
 	}
 }

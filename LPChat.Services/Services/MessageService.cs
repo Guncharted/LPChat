@@ -4,15 +4,15 @@ using LPChat.Common.Models.Extensions;
 using LPChat.Data.MongoDb.Entities;
 using LPChat.Domain;
 using LPChat.Domain.Results;
-using LPChat.Infrastructure.Interfaces;
-using LPChat.Infrastructure.Mapping;
+using LPChat.Services.Interfaces;
+using LPChat.Services.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LPChat.Infrastructure.Services
+namespace LPChat.Services.Services
 {
     public class MessageService : IMessageService
     {

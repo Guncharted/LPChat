@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LPChat.Infrastructure.ViewModels
+namespace LPChat.Services.ViewModels
 {
 	public class ChatInfoViewModel
 	{

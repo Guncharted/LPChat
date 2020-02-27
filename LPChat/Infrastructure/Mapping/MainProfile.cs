@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using LPChat.Common.Models;
-using LPChat.Infrastructure.ViewModels;
+using LPChat.Services.ViewModels;
 
-namespace LPChat.Infrastructure.Mapping
+namespace LPChat.Services.Mapping
 {
     public class MainProfile : Profile
     {
@@ -14,10 +14,10 @@ namespace LPChat.Infrastructure.Mapping
             CreateMap<ChatInfoViewModel, ChatModel>().ReverseMap();
             CreateMap<ChatStateViewModel, ChatModel>().ReverseMap();
 
-            CreateMap<PersonInfoViewModel, UserModel>().ReverseMap();
-            CreateMap<PersonLoginViewModel, UserSecurityModel>().ReverseMap();
-            CreateMap<PersonPasswordChangeViewModel, UserSecurityModel>().ReverseMap();
-            CreateMap<PersonRegisterViewModel, UserSecurityModel>().ReverseMap();
+            CreateMap<UserInfoViewModel, UserModel>().ReverseMap();
+            CreateMap<UserLoginViewModel, UserSecurityModel>().ReverseMap();
+            CreateMap<UserPasswordChangeViewModel, UserSecurityModel>().ReverseMap();
+            CreateMap<UserRegisterViewModel, UserSecurityModel>().ReverseMap();
 
             CreateMap<MessageViewModel, MessageModel>().ReverseMap();
         }

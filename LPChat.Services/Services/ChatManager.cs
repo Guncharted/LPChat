@@ -1,11 +1,11 @@
 ﻿using LPChat.Common.Models;
 using LPChat.Domain.Results;
-using LPChat.Infrastructure.Interfaces;
+using LPChat.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace LPChat.Infrastructure.Services
+namespace LPChat.Services.Services
 {
     public class ChatManager
     {

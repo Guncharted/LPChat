@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 
-namespace LPChat.Infrastructure
+namespace LPChat.Services
 {
     public static class IdentityExtensions
     {

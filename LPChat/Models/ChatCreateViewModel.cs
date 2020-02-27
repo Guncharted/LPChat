@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace LPChat.Infrastructure.ViewModels
+namespace LPChat.Services.ViewModels
 {
     public class ChatCreateViewModel
     {

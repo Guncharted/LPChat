@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace LPChat.Infrastructure.ViewModels
+namespace LPChat.Services.ViewModels
 {
-	public class PersonInfoViewModel
+	public class UserInfoViewModel
 	{
 		public Guid ID { get; set; }
 		public string Username { get; set; }

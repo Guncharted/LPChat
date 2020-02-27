@@ -7,11 +7,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat", "LPChat\LPChat.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat.Common", "LPChat.Common\LPChat.Common.csproj", "{CAA90E93-C966-4560-A425-079E3E0FACED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat.Infrastructure", "LPChat.Infrastructure\LPChat.Infrastructure.csproj", "{339C2C69-2499-4299-A582-7EAA853FB9CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat.Services", "LPChat.Services\LPChat.Services.csproj", "{339C2C69-2499-4299-A582-7EAA853FB9CA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat.Data.MongoDb", "LPChat.Data.MongoDb\LPChat.Data.MongoDb.csproj", "{60337936-2C60-4C5C-9FD4-EB987A723B89}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat.Data.MongoDb.Abstractions", "LPChat.Data.MongoDb.Abstractions\LPChat.Data.MongoDb.Abstractions.csproj", "{5C7BEF1A-3D7C-4125-9467-A440A572F5E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LPChat.Services.Abstractions", "LPChat.Services.Abstractions\LPChat.Services.Abstractions.csproj", "{DE7D5F92-2BFE-4C91-A634-96E5E329F4FA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3624B3FA-A25D-4B8F-A430-F5005CD76633}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +46,10 @@ Global
 		{5C7BEF1A-3D7C-4125-9467-A440A572F5E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C7BEF1A-3D7C-4125-9467-A440A572F5E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C7BEF1A-3D7C-4125-9467-A440A572F5E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE7D5F92-2BFE-4C91-A634-96E5E329F4FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE7D5F92-2BFE-4C91-A634-96E5E329F4FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE7D5F92-2BFE-4C91-A634-96E5E329F4FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE7D5F92-2BFE-4C91-A634-96E5E329F4FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

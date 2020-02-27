@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace LPChat.Infrastructure.ViewModels
+namespace LPChat.Services.ViewModels
 {
     public class MessageViewModel
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace LPChat.Infrastructure.ViewModels
+namespace LPChat.Services.ViewModels
 {
-	public class PersonPasswordChangeViewModel
+	public class UserPasswordChangeViewModel
     {
         [Required]
         public Guid ID { get; set; }

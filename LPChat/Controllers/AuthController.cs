@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using LPChat.Common.Models;
-using LPChat.Infrastructure;
-using LPChat.Infrastructure.Interfaces;
-using LPChat.Infrastructure.ViewModels;
+using LPChat.Services;
+using LPChat.Services.Interfaces;
+using LPChat.Services.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,7 +25,7 @@ namespace LPChat.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(PersonLoginViewModel userForLogin)
+        public async Task<IActionResult> Login(UserLoginViewModel userForLogin)
         {
             var user = _mapper.Map<UserSecurityModel>(userForLogin);
             var result = await _authService.LoginAsync(user);
@@ -39,7 +39,7 @@ namespace LPChat.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(PersonRegisterViewModel userForRegister)
+        public async Task<IActionResult> Register(UserRegisterViewModel userForRegister)
         {
             var user = _mapper.Map<UserSecurityModel>(userForRegister);
 
@@ -55,7 +55,7 @@ namespace LPChat.Controllers
 
         [Authorize]
         [HttpPost("changePassword")]
-        public async Task<IActionResult> ChangePassword(PersonPasswordChangeViewModel patch)
+        public async Task<IActionResult> ChangePassword(UserPasswordChangeViewModel patch)
         {
             var user = _mapper.Map<UserSecurityModel>(patch);
 

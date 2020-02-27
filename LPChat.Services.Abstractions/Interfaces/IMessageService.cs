@@ -3,7 +3,7 @@ using LPChat.Domain.Results;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace LPChat.Infrastructure.Interfaces
+namespace LPChat.Services.Interfaces
 {
     public interface IMessageService
     {

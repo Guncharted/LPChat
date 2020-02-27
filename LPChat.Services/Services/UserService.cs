@@ -1,4 +1,4 @@
-﻿using LPChat.Infrastructure.Interfaces;
+﻿using LPChat.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +8,9 @@ using LPChat.Common.DbContracts;
 using LPChat.Data.MongoDb.Entities;
 using LPChat.Common.Exceptions;
 using LPChat.Common.Models;
-using LPChat.Infrastructure.Mapping;
+using LPChat.Services.Mapping;
 
-namespace LPChat.Infrastructure.Services
+namespace LPChat.Services.Services
 {
     public class UserService : IUserService
     {
@@ -47,7 +47,6 @@ namespace LPChat.Infrastructure.Services
             var users = await repository.GetAsync(p => Ids.Contains(p.ID));
             return DataMapper.Map<IEnumerable<User>, IEnumerable<UserModel>>(users);
         }
-
 
         //TODO below methods should be moved to separate service
         private void AddPersonToCache(UserModel person)

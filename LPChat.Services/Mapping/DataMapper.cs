@@ -2,7 +2,7 @@
 using LPChat.Common.Models;
 using LPChat.Data.MongoDb.Entities;
 
-namespace LPChat.Infrastructure.Mapping
+namespace LPChat.Services.Mapping
 {
     public static class DataMapper
     {

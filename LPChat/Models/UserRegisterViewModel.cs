@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LPChat.Infrastructure.ViewModels
+namespace LPChat.Services.ViewModels
 {
-    public class PersonRegisterViewModel
+    public class UserRegisterViewModel
     {
         [Required]
         public string Username { get; set; }

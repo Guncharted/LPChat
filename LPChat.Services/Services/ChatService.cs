@@ -4,14 +4,14 @@ using LPChat.Common.Models;
 using LPChat.Common.Models.Extensions;
 using LPChat.Data.MongoDb.Entities;
 using LPChat.Domain.Results;
-using LPChat.Infrastructure.Interfaces;
+using LPChat.Services.Interfaces;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LPChat.Infrastructure.Services
+namespace LPChat.Services.Services
 {
     public class ChatService : IChatService
     {

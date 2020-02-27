@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using LPChat.Common.Models;
 
-namespace LPChat.Infrastructure.Interfaces
+namespace LPChat.Services.Interfaces
 {
 	public interface IUserService
 	{

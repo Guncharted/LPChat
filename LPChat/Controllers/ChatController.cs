@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using LPChat.Common.Models;
-using LPChat.Infrastructure;
-using LPChat.Infrastructure.Interfaces;
-using LPChat.Infrastructure.ViewModels;
+using LPChat.Services;
+using LPChat.Services.Interfaces;
+using LPChat.Services.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
