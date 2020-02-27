@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LPChat.Common;
 using LPChat.Common.DbContracts;
 using LPChat.Infrastructure.Interfaces;
 using LPChat.Infrastructure.Mapping;
@@ -27,6 +28,8 @@ namespace LPChat.Infrastructure
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<IAuthorizationContext, AuthorizationContext>();
 
             var mapperConfig = new MapperConfiguration(cfg =>
             {
