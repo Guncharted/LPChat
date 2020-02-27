@@ -59,9 +59,7 @@ namespace LPChat.Controllers
         {
             var user = _mapper.Map<UserSecurityModel>(patch);
 
-            var requestorId = User.GetPersonId();
-
-            var result = await _authService.ChangePasswordAsync(user, requestorId);
+            var result = await _authService.ChangePasswordAsync(user);
             return Ok();
         }
 

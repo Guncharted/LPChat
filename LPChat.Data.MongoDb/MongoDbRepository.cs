@@ -46,8 +46,8 @@ namespace LPChat.MongoDb
 
         public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate)
         {
-            var dbList = await Collection.FindAsync(predicate);
-            return dbList.ToList();
+            var dbList = Collection.AsQueryable().Where(predicate.Compile()).ToList();
+            return await Task.FromResult(dbList);
         }
 
         public async Task RemoveAsync(T item)

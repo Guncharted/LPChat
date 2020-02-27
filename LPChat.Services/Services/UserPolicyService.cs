@@ -1,4 +1,6 @@
 ﻿using LPChat.Common;
+using LPChat.Common.Models;
+using LPChat.Domain;
 using LPChat.Services.Interfaces;
 using System;
 using System.Threading.Tasks;
@@ -16,10 +18,14 @@ namespace LPChat.Services
             _userService = userService;
         }
 
-        public async Task SetPolicies(string userId)
+        public async Task SetContext(Guid? userId)
         {
-            var user = await _userService.GetById(new Guid(userId));
-
+            Guard.NotNull(userId, nameof(userId));
+            var user = await _userService.GetById(userId.Value);
+            if (user != null)
+            {
+                _authContext.SetContext(user);
+            }
             _authContext.SetPolicy(UserPolicies.UserAdministration, user.IsAdmin);
         }
     }

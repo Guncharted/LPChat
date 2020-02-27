@@ -14,11 +14,17 @@ namespace LPChat.Services.Mapping
             CreateMap<ChatInfoViewModel, ChatModel>().ReverseMap();
             CreateMap<ChatStateViewModel, ChatModel>().ReverseMap();
 
-            CreateMap<UserInfoViewModel, UserModel>().ReverseMap();
-            CreateMap<UserLoginViewModel, UserSecurityModel>().ReverseMap();
-            CreateMap<UserPasswordChangeViewModel, UserSecurityModel>().ReverseMap();
-            CreateMap<UserRegisterViewModel, UserSecurityModel>().ReverseMap();
-
+            CreateMap<UserInfoViewModel, UserModel>()
+                .ForMember(d => d.Email, opt => opt.MapFrom(s => s.Email.ToLower()))
+                .ReverseMap();
+            CreateMap<UserLoginViewModel, UserSecurityModel>()
+                .ForMember(d => d.Email, opt => opt.MapFrom(s => s.Email.ToLower()))
+                .ReverseMap();
+            CreateMap<UserPasswordChangeViewModel, UserSecurityModel>()
+                .ReverseMap();
+            CreateMap<UserRegisterViewModel, UserSecurityModel>()
+                .ForMember(d => d.Email, opt => opt.MapFrom(s => s.Email.ToLower()))
+                .ReverseMap();
             CreateMap<MessageViewModel, MessageModel>().ReverseMap();
         }
     }

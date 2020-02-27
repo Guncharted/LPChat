@@ -16,6 +16,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using LPChat.Filters;
 
 namespace LPChat.Services
 {
@@ -29,6 +30,7 @@ namespace LPChat.Services
             services.AddScoped<IUserService, UserService>();
 
             services.AddScoped<IAuthorizationContext, AuthorizationContext>();
+            services.AddScoped<IUserPolicyService, UserPolicyService>();
 
             var mapper = new MapperConfiguration(cfg =>
             {
@@ -69,13 +71,12 @@ namespace LPChat.Services
                     };
                 });
 
-            services.AddControllers();
-            //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-            //.AddJsonOptions(options =>
-            //{
-            //    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            //    options.JsonSerializerOptions.IgnoreNullValues = true;
-            //});
+            services.AddControllers(opt => opt.Filters.Add(typeof(UserAuthFilter)))
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
+                });
             services.AddRouting();
         }
 

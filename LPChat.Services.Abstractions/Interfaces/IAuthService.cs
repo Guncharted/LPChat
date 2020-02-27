@@ -10,6 +10,5 @@ namespace LPChat.Services.Interfaces
         Task<OperationResult> LoginAsync(UserSecurityModel userForLogin);
         Task<OperationResult> RegisterAsync(UserSecurityModel userForRegister);
         Task<OperationResult> ChangePasswordAsync(UserSecurityModel userToChange);
-        Task<OperationResult> ChangePasswordAsync(UserSecurityModel userToChange, Guid? requestorId);
     }
 }

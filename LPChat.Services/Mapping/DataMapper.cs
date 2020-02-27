@@ -23,14 +23,14 @@ namespace LPChat.Services.Mapping
         public DataProfile()
         {
             CreateMap<UserModel, User>()
-            .ForMember(d => d.Username, opt => opt.Ignore())
+                .ForMember(d => d.Email, opt => opt.Ignore())
                 .ForMember(d => d.PasswordHash, opt => opt.Ignore())
                 .ForMember(d => d.PasswordSalt, opt => opt.Ignore())
                 .ForMember(d => d.CreatedUtcDate, opt => opt.Ignore())
                 .ForMember(d => d.LastUpdatedUtcDate, opt => opt.Ignore())
                 .ReverseMap();
             CreateMap<UserSecurityModel, User>()
-                .ForMember(d => d.Username, opt => opt.Ignore())
+                .ForMember(d => d.Email, opt => opt.MapFrom(s => s.Email.ToLower()))
                 .ForMember(d => d.PasswordHash, opt => opt.Ignore())
                 .ForMember(d => d.PasswordSalt, opt => opt.Ignore())
                 .ForMember(d => d.CreatedUtcDate, opt => opt.Ignore())

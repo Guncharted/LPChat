@@ -10,7 +10,7 @@ namespace LPChat.Data.MongoDb.Entities
         public Guid ID { get; set; }
 
         [BsonRequired]
-        public string Username { get; set; }
+        public string Email { get; set; }
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -24,5 +24,7 @@ namespace LPChat.Data.MongoDb.Entities
         public DateTime CreatedUtcDate { get; set; }
 
         public DateTime LastUpdatedUtcDate { get; set; }
+
+        public bool? IsAdmin { get; set; }
     }
 }

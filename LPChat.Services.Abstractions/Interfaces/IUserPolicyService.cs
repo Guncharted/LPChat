@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace LPChat.Services
 {
     public interface IUserPolicyService
     {
-        Task SetPolicies(string userId);
+        Task SetContext(Guid? userId);
     }
 }

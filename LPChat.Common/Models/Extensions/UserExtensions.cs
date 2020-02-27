@@ -10,7 +10,7 @@ namespace LPChat.Common.Models.Extensions
         {
             if (string.IsNullOrWhiteSpace(personInfo.FirstName) || string.IsNullOrWhiteSpace(personInfo.LastName))
             {
-                return personInfo.Username;
+                return personInfo.Email;
             }
 
             return string.Format($"{personInfo.FirstName} {personInfo.LastName}");

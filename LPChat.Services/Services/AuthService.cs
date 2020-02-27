@@ -14,6 +14,7 @@ using LPChat.Common.Models;
 using LPChat.Services.Mapping;
 using LPChat.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
+using LPChat.Common;
 
 namespace LPChat.Services.Services
 {
@@ -21,18 +22,20 @@ namespace LPChat.Services.Services
     {
         private readonly IConfiguration _config;
         private readonly IRepositoryManager _repoManager;
+        private readonly IAuthorizationContext _authorizationContext;
 
-        public AuthService(IRepositoryManager repoManager, IConfiguration configuration)
+        public AuthService(IRepositoryManager repoManager, IAuthorizationContext authorizationContext, IConfiguration configuration)
         {
             _config = configuration;
             _repoManager = repoManager;
+            _authorizationContext = authorizationContext;
         }
 
         public async Task<OperationResult> RegisterAsync(UserSecurityModel userForRegister)
         {
             Guard.NotNull(userForRegister, nameof(userForRegister));
 
-            if (await PersonExists(userForRegister.Username))
+            if (await PersonExists(userForRegister.Email))
             {
                 throw new DuplicateException("User already exists!");
             }
@@ -40,7 +43,7 @@ namespace LPChat.Services.Services
             CreatePasswordHash(userForRegister.Password, out byte[] passwordHash, out byte[] passwordSalt);
             var user = DataMapper.Map<UserSecurityModel, User>(userForRegister);
 
-            user.Username = userForRegister.Username;
+            user.Email = userForRegister.Email;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
@@ -55,41 +58,29 @@ namespace LPChat.Services.Services
             Guard.NotNull(userForLogin, nameof(userForLogin));
 
             var repository = _repoManager.GetRepository<User>();
-            var persons = await repository.GetAsync(u => string.Equals(u.Username, userForLogin.Username, StringComparison.OrdinalIgnoreCase));
-            var person = persons.FirstOrDefault();
+            var user = (await repository.GetAsync(u => string.Compare(u.Email, userForLogin.Email, true) == 0))?.FirstOrDefault();
 
-            if (person == null)
-                throw new PersonNotFoundException("User not found.");
+            _ = user ?? throw new PersonNotFoundException("User not found.");
 
-            if (!VerifyPasswordHash(userForLogin.Password, person.PasswordHash, person.PasswordSalt))
+            if (!VerifyPasswordHash(userForLogin.Password, user.PasswordHash, user.PasswordSalt))
                 throw new PasswordMismatchException("Wrong password!");
 
-            var token = GenerateToken(person);
-            var result = new OperationResult(true, "Logged in", token);
-
-            return result;
+            var token = GenerateToken(user);
+            return new OperationResult(true, "Logged in", token);
         }
 
-        // TODO. remove overloads after policies will be introduced
-        public async Task<OperationResult> ChangePasswordAsync(UserSecurityModel userToChange) => await ChangePasswordAsync(userToChange, null);
-
-        public async Task<OperationResult> ChangePasswordAsync(UserSecurityModel userToChange, Guid? requestorId)
-        {
-            var validateRequestor = requestorId != null;
-            return await ChangePasswordAsync(userToChange, validateRequestor, requestorId);
-        }
-
-        private async Task<OperationResult> ChangePasswordAsync(UserSecurityModel userToChange, bool validateRequestor, Guid? requestorId)
+        public async Task<OperationResult> ChangePasswordAsync(UserSecurityModel userToChange)
         {
             if (userToChange.Password != userToChange.ConfirmPassword)
                 throw new PasswordMismatchException("New password is not matching confirmation value");
 
             var repository = _repoManager.GetRepository<User>();
-            var user = (await repository.GetAsync(u => u.ID == userToChange.ID)).FirstOrDefault();
+            var user = (await repository.GetAsync(u => u.ID == userToChange.ID))?.FirstOrDefault();
 
             Guard.NotNull(user, nameof(user));
 
-            if (validateRequestor && requestorId != user.ID)
+            if (_authorizationContext.GetContext<UserModel>().ID != user.ID
+                && !_authorizationContext.GetPolicy(UserPolicies.UserAdministration))
                 throw new ChatAppException("Unauthorized attempt to change password");
 
             if (!VerifyPasswordHash(userToChange.OldPassword, user.PasswordHash, user.PasswordSalt))
@@ -113,9 +104,9 @@ namespace LPChat.Services.Services
             }
         }
 
-        private string GenerateToken(User person)
+        private string GenerateToken(User user)
         {
-            var claims = GetClaimsIdentity(person);
+            var claims = GetClaimsIdentity(user);
 
             //security key from appsettings.json
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Token").Value));
@@ -152,10 +143,10 @@ namespace LPChat.Services.Services
             return true;
         }
 
-        private async Task<bool> PersonExists(string username)
+        private async Task<bool> PersonExists(string email)
         {
             var repository = _repoManager.GetRepository<User>();
-            var persons = (await repository.GetAsync(u => u.Username.Equals(username)))?.ToList();
+            var persons = (await repository.GetAsync(u => string.Compare(u.Email, email, true) == 0))?.ToList();
 
             return persons?.Count > 0;
         }

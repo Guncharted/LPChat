@@ -5,7 +5,8 @@ namespace LPChat.Services.ViewModels
     public class UserRegisterViewModel
     {
         [Required]
-        public string Username { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
 
         [Required]
         [StringLength(20, MinimumLength = 8, ErrorMessage = "Пароль должен быть от 8 до 20 знаков")]

@@ -1,8 +1,6 @@
 ﻿using LPChat.Services;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
-using System.Linq;
-using System.Security.Claims;
 
 namespace LPChat.Filters
 {
@@ -17,11 +15,10 @@ namespace LPChat.Filters
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            context.HttpContext.Request.Path.Value.Contains("auth");
             if (context.HttpContext.User.Identity.IsAuthenticated)
             {
-                var userId = context.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-                _userPolicyService.SetPolicies(userId);
+                var userId = context.HttpContext.User.GetPersonId();
+                _userPolicyService.SetContext(userId);
             }
         }
     }
