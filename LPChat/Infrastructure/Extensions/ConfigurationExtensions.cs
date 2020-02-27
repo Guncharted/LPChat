@@ -17,6 +17,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 using LPChat.Filters;
+using LPChat.Infrastructure;
 
 namespace LPChat.Services
 {
@@ -28,6 +29,8 @@ namespace LPChat.Services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IChatService, ChatService>();
             services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<UserAuthFilter>();
 
             services.AddScoped<IAuthorizationContext, AuthorizationContext>();
             services.AddScoped<IUserPolicyService, UserPolicyService>();
@@ -51,6 +54,7 @@ namespace LPChat.Services
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "LP Chat", Version = "v1" });
                 c.DocInclusionPredicate((doc, api) => true);
                 c.CustomSchemaIds(x => x.FullName);
+                c.OperationFilter<SwaggerHeaders>();
                 var xmlDocFile = Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
                 if (File.Exists(xmlDocFile))
                 {
@@ -70,6 +74,8 @@ namespace LPChat.Services
                         ValidateAudience = false
                     };
                 });
+
+            services.AddAuthorization();
 
             services.AddControllers(opt => opt.Filters.Add(typeof(UserAuthFilter)))
                 .AddJsonOptions(options =>

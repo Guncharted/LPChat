@@ -44,8 +44,7 @@ namespace LPChat.Middleware
 			};
 
 			context.Response.Headers.Add("Application-Error", exception.Message);
-			context.Response.Headers.Add("Access-Control-Expose-Headers", "Application-Error");
-
+			
 			var json = JsonConvert.SerializeObject(new
 			{
 				error = new

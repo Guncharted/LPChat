@@ -21,6 +21,8 @@ namespace LPChat.Services.Mapping
                 .ForMember(d => d.Email, opt => opt.MapFrom(s => s.Email.ToLower()))
                 .ReverseMap();
             CreateMap<UserPasswordChangeViewModel, UserSecurityModel>()
+                .ForMember(d => d.Password, opt => opt.MapFrom(s => s.NewPassword))
+                .ForMember(d => d.ConfirmPassword, opt => opt.MapFrom(s => s.ConfirmNewPassword))
                 .ReverseMap();
             CreateMap<UserRegisterViewModel, UserSecurityModel>()
                 .ForMember(d => d.Email, opt => opt.MapFrom(s => s.Email.ToLower()))

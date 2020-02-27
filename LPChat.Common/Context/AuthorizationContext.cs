@@ -34,8 +34,8 @@ namespace LPChat.Common
             {
                 _context.Add(typeof(T), value);
             }
-
-            throw new DuplicateException($"{typeof(T)} is aready present in the context dictionary");
+            else
+                throw new DuplicateException($"{typeof(T)} is aready present in the context dictionary");
         }
 
         public T GetContext<T>() where T : class

@@ -37,6 +37,7 @@ namespace LPChat
             app.UseCors(opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseCustomExceptionHandler();
 
