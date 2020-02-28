@@ -7,9 +7,6 @@ namespace LPChat.Services.Interfaces
 {
     public interface IMessageService
     {
-        List<MessageModel> Messages { get; }
-
         Task<OperationResult> AddMessage(MessageModel messageToAdd);
-        List<MessageModel> GetMessages(MessageModel lastMessage);
     }
 }

@@ -10,7 +10,7 @@ using LPChat.Common.Exceptions;
 using LPChat.Common.Models;
 using LPChat.Services.Mapping;
 
-namespace LPChat.Services.Services
+namespace LPChat.Services
 {
     public class UserService : IUserService
     {

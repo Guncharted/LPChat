@@ -16,7 +16,7 @@ using LPChat.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using LPChat.Common;
 
-namespace LPChat.Services.Services
+namespace LPChat.Services
 {
     public class AuthService : IAuthService
     {

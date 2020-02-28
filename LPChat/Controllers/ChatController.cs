@@ -15,12 +15,17 @@ namespace LPChat.Controllers
         private readonly IMessageService _messageService;
         private readonly IChatService _chatservice;
         private readonly IMapper _mapper;
+        private readonly IInstantMessagingService _instantMessagingService;
 
-        public ChatController(IMessageService messageService, IChatService chatService, IMapper mapper)
+        public ChatController(IMessageService messageService,
+                              IChatService chatService,
+                              IInstantMessagingService instantMessagingService,
+                              IMapper mapper)
         {
             _messageService = messageService;
             _chatservice = chatService;
             _mapper = mapper;
+            _instantMessagingService = instantMessagingService;
         }
 
         [HttpPost("add")]
@@ -36,7 +41,7 @@ namespace LPChat.Controllers
         public IActionResult Poll(MessageViewModel messageViewModel)
         {
             var message = _mapper.Map<MessageModel>(messageViewModel);
-            var result = _messageService.GetMessages(message);
+            var result = _instantMessagingService.GetMessages(message);
 
             return Ok(result);
         }

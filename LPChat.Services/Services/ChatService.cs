@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LPChat.Services.Services
+namespace LPChat.Services
 {
     public class ChatService : IChatService
     {

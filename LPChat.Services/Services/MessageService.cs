@@ -12,22 +12,21 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LPChat.Services.Services
+namespace LPChat.Services
 {
     public class MessageService : IMessageService
     {
-        //TODO. To be removed and changed to memory cache
-        private List<MessageModel> _messages;
-        public List<MessageModel> Messages => _messages = _messages ?? new List<MessageModel>();
-
         private readonly IRepositoryManager _repositoryManager;
         private readonly IUserService _personInfoService;
-        private readonly object threadLock = new object();
+        private readonly IInstantMessagingService _instantMessagingService;
 
-        public MessageService(IRepositoryManager repositoryManager, IUserService personInfoService)
+        public MessageService(IRepositoryManager repositoryManager, 
+                              IUserService personInfoService, 
+                              IInstantMessagingService instantMessagingService)
         {
             _repositoryManager = repositoryManager;
             _personInfoService = personInfoService;
+            _instantMessagingService = instantMessagingService;
         }
 
         public async Task<OperationResult> AddMessage(MessageModel messageToAdd)
@@ -49,10 +48,7 @@ namespace LPChat.Services.Services
             messageToAdd.CreatedUtcDate = message.CreatedUtcDate;
             messageToAdd.PersonName = user.GetDisplayName();
 
-            lock (threadLock)
-            {
-                Messages.Add(messageToAdd);
-            }
+            _instantMessagingService.AddMessage(messageToAdd);
 
             //create result
             var result = messageToAdd.ID != null && messageToAdd.ID != Guid.Empty;
@@ -62,22 +58,6 @@ namespace LPChat.Services.Services
                 return new OperationResult(result, "Failed to create");
         }
 
-        public List<MessageModel> GetMessages(MessageModel lastMessage)
-        {
-            var startDate = DateTime.UtcNow;
-
-            while (true)
-            {
-                var messagesForReturn = Messages.Where(m => m.ChatId == lastMessage.ChatId && m.CreatedUtcDate > lastMessage.CreatedUtcDate).ToList();
-
-                if (messagesForReturn.Count > 0 || DateTime.UtcNow >= startDate + TimeSpan.FromMinutes(5))
-                {
-                    return messagesForReturn;
-                }
-
-                Thread.Sleep(1000);
-            }
-
-        }
+        
     }
 }

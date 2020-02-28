@@ -3,7 +3,7 @@ using LPChat.Common;
 using LPChat.Common.DbContracts;
 using LPChat.Services.Interfaces;
 using LPChat.Services.Mapping;
-using LPChat.Services.Services;
+using LPChat.Services;
 using LPChat.Middleware;
 using LPChat.MongoDb;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -43,6 +43,8 @@ namespace LPChat.Services
 
             services.AddSingleton(mapper);
 
+            services.AddSingleton<IInstantMessagingService, InstantMessagingService>();
+
             services
                 .AddSingleton<IRepositoryManager, MongoRepositoryManager>(x => new MongoRepositoryManager("cchat", configuration.GetConnectionString("MongoLocal")));
 
@@ -64,7 +66,6 @@ namespace LPChat.Services
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
-
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
