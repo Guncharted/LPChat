@@ -31,7 +31,7 @@ namespace LPChat.Services
             }
 
             var repository = _repoManager.GetRepository<User>();
-            var user = await repository.FindById(userId);
+            var user = await repository.FindById(userId).ConfigureAwait(false);
 
             _ = user ?? throw new PersonNotFoundException($"Person with id {userId} does not exist!");
 
@@ -44,7 +44,7 @@ namespace LPChat.Services
         public async Task<IEnumerable<UserModel>> Get(IEnumerable<Guid> Ids)
         {
             var repository = _repoManager.GetRepository<User>();
-            var users = await repository.GetAsync(p => Ids.Contains(p.ID));
+            var users = await repository.GetAsync(p => Ids.Contains(p.ID)).ConfigureAwait(false);
             return DataMapper.Map<IEnumerable<User>, IEnumerable<UserModel>>(users);
         }
 
@@ -56,12 +56,7 @@ namespace LPChat.Services
 
         private bool TryGetFromCache(Guid personId, out UserModel cachedPerson)
         {
-            if (_memoryCache.TryGetValue(personId, out cachedPerson))
-            {
-                return true;
-            }
-
-            return false;
+            return _memoryCache.TryGetValue(personId, out cachedPerson);
         }
     }
 }

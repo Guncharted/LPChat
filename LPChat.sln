@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat", "LPChat\LPChat.csproj", "{970C0B1B-2373-43E6-9E60-176510D765C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat.API", "LPChat.API\LPChat.API.csproj", "{970C0B1B-2373-43E6-9E60-176510D765C4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat.Common", "LPChat.Common\LPChat.Common.csproj", "{CAA90E93-C966-4560-A425-079E3E0FACED}"
 EndProject
@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat.Data.MongoDb", "LPCh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat.Data.MongoDb.Abstractions", "LPChat.Data.MongoDb.Abstractions\LPChat.Data.MongoDb.Abstractions.csproj", "{5C7BEF1A-3D7C-4125-9467-A440A572F5E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LPChat.Services.Abstractions", "LPChat.Services.Abstractions\LPChat.Services.Abstractions.csproj", "{DE7D5F92-2BFE-4C91-A634-96E5E329F4FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LPChat.Services.Abstractions", "LPChat.Services.Abstractions\LPChat.Services.Abstractions.csproj", "{DE7D5F92-2BFE-4C91-A634-96E5E329F4FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
