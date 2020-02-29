@@ -43,8 +43,6 @@ namespace LPChat.Middleware
 
 			};
 
-			context.Response.Headers.Add("Application-Error", exception.Message);
-			
 			var json = JsonConvert.SerializeObject(new
 			{
 				error = new

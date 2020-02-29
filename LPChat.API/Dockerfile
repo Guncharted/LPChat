@@ -1,23 +1,27 @@
-#Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
-#For more information, please see https://aka.ms/containercompat
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-nanoserver-1903 AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2-nanoserver-1903 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["LPChat/LPChat.csproj", "LPChat/"]
-RUN dotnet restore "LPChat/LPChat.csproj"
+COPY ["LPChat.API/LPChat.API.csproj", "LPChat.API/"]
+COPY ["LPChat.Services/LPChat.Services.csproj", "LPChat.Services/"]
+COPY ["LPChat.Common/LPChat.Common.csproj", "LPChat.Common/"]
+COPY ["LPChat.Services.Abstractions/LPChat.Services.Abstractions.csproj", "LPChat.Services.Abstractions/"]
+COPY ["LPChat.Data.MongoDb.Abstractions/LPChat.Data.MongoDb.Abstractions.csproj", "LPChat.Data.MongoDb.Abstractions/"]
+COPY ["LPChat.Data.MongoDb/LPChat.Data.MongoDb.csproj", "LPChat.Data.MongoDb/"]
+RUN dotnet restore "LPChat.API/LPChat.API.csproj"
 COPY . .
-WORKDIR "/src/LPChat"
-RUN dotnet build "LPChat.csproj" -c Release -o /app
+WORKDIR "/src/LPChat.API"
+RUN dotnet build "LPChat.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "LPChat.csproj" -c Release -o /app
+RUN dotnet publish "LPChat.API.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "LPChat.dll"]
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "LPChat.API.dll"]
