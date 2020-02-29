@@ -46,7 +46,7 @@ namespace LPChat.Services
             services.AddSingleton<IInstantMessagingService, InstantMessagingService>();
 
             services
-                .AddSingleton<IRepositoryManager, MongoRepositoryManager>(x => new MongoRepositoryManager("cchat", configuration.GetConnectionString("MongoLocal")));
+                .AddSingleton<IRepositoryManager, MongoRepositoryManager>(x => new MongoRepositoryManager("cchat", configuration.GetConnectionString("MongoFromDocker")));
 
             services.AddCors();
             services.AddMemoryCache();
