@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   api:
-    build: .
+    image: guncharted/lpchat-api
     ports:
       - 80:80
       - 443:443
