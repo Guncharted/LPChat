@@ -9,7 +9,7 @@ resources:
 - repo: self
 
 variables:
-  tag: '$(Build.BuildId)'
+- group: DockerTags-Test
 
 stages:
 - stage: Build
