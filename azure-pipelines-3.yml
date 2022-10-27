@@ -30,6 +30,6 @@ stages:
       inputs:
         command: buildAndPush
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        repository: guncharted/lpchat-api
+        repository: $(repo)
         tags: |
           $(tag)
